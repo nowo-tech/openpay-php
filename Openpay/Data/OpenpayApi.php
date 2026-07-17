@@ -1,38 +1,49 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Data;
+
+use Override;
 
 class OpenpayApi extends OpenpayApiResourceBase
 {
+    protected $derivedResources = [
+        'Bine'     => [],
+        'Customer' => [],
+        'Card'     => [],
+        'Charge'   => [],
+        'Pse'      => [],
+        'Payout'   => [],
+        'Fee'      => [],
+        'Plan'     => [],
+        'Webhook'  => [],
+        'Token'    => []];
 
-    protected $derivedResources = array(
-        'Bine' => array(),
-        'Customer' => array(),
-        'Card' => array(),
-        'Charge' => array(),
-        'Pse' => array(),
-        'Payout' => array(),
-        'Fee' => array(),
-        'Plan' => array(),
-        'Webhook' => array(),
-        'Token' => array());
-
-    public static function getInstance($r, $p = null)
+    #[Override]
+    protected static function getInstance($r, $p = null)
     {
-        if(version_compare(phpversion(), '8.3.0', '<')){
-            $resourceName = get_class();
-        } else {
-            $resourceName = self::class;
-        }
+        $resourceName = self::class;
+
         return parent::getInstance($resourceName);
     }
 
-    public function getMerchantInfo()
+    /**
+     * Public entry used by {@see Openpay::getInstance()} (credentials already configured).
+     */
+    public static function createRoot(): self
+    {
+        return self::getInstance(null);
+    }
+
+    #[Override]
+    protected function getMerchantInfo()
     {
         return parent::getMerchantInfo();
     }
 
-    protected function getResourceUrlName($p = true)
+    #[Override]
+    protected function getResourceUrlName($p = true): string
     {
         return '';
     }
@@ -41,5 +52,4 @@ class OpenpayApi extends OpenpayApiResourceBase
     {
         return $this->getUrl();
     }
-
 }
