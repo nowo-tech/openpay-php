@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Openpay\Tests;
+namespace Openpay\Tests\Unit;
 
 use Openpay\Data\Openpay;
 use Openpay\Data\OpenpayApiConnector;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 final class OpenpayCredentialsTest extends TestCase
 {
@@ -125,7 +124,7 @@ final class OpenpayCredentialsTest extends TestCase
     private function simulateFreshProcess(): void
     {
         Openpay::reset();
-        $reflection = new ReflectionClass(Openpay::class);
+        $reflection = new \ReflectionClass(Openpay::class);
         foreach (['useEnvironmentCredentials', 'useEnvironmentProductionMode'] as $property) {
             $reflection->getProperty($property)->setValue(null, true);
         }
@@ -151,10 +150,10 @@ final class OpenpayCredentialsTest extends TestCase
     private function restoreEnv(): void
     {
         foreach ($this->previousEnv as $name => $value) {
-            if ($value === false) {
+            if (false === $value) {
                 putenv($name);
             } else {
-                putenv($name . '=' . $value);
+                putenv($name.'='.$value);
             }
         }
     }

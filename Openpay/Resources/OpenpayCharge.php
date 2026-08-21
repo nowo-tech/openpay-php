@@ -8,7 +8,6 @@ use Openpay\Data\OpenpayApiResourceBase;
 
 class OpenpayCharge extends OpenpayApiResourceBase
 {
-
     protected $authorization;
     protected $creation_date;
     protected $currency;
@@ -19,13 +18,13 @@ class OpenpayCharge extends OpenpayApiResourceBase
     // temporal hack
     // TODO: checar porque no instancia Openpaycard al recibir el parametro
     protected $card;
-    protected $derivedResources = array('Refund' => null, 'Capture' => null);
+    protected $derivedResources = ['Refund' => null, 'Capture' => null];
 
     public function refund($params)
     {
         $resource = $this->derivedResources['refunds'];
         if ($resource) {
-            return parent::_create($resource->resourceName, $params, array('parent' => $this));
+            return parent::_create($resource->resourceName, $params, ['parent' => $this]);
         }
     }
 
@@ -33,7 +32,7 @@ class OpenpayCharge extends OpenpayApiResourceBase
     {
         $resource = $this->derivedResources['captures'];
         if ($resource) {
-            return parent::_create($resource->resourceName, $params, array('parent' => $this));
+            return parent::_create($resource->resourceName, $params, ['parent' => $this]);
         }
     }
 
@@ -41,5 +40,4 @@ class OpenpayCharge extends OpenpayApiResourceBase
     {
         return $this->_updateCharge($params);
     }
-
 }

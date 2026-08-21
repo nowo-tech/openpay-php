@@ -5,29 +5,29 @@ declare(strict_types=1);
 namespace Openpay\Resources;
 
 use Openpay\Data\OpenpayApiResourceBase;
-use Openpay\Data\OpenpayApiDerivedResource;
 
-class OpenpayCustomer extends OpenpayApiResourceBase {
-
+class OpenpayCustomer extends OpenpayApiResourceBase
+{
     protected $status;
     protected $creation_date;
     protected $balance;
     protected $clabe;
-    protected $derivedResources = array(
-        'Card' => array(),
-        'BankAccount' => array(),
-        'Charge' => array(),
-        'Pse' => array(),
-        'Transfer' => array(),
-        'Payout' => array(),
-        'Subscription' => array());
+    protected $derivedResources = [
+        'Card' => [],
+        'BankAccount' => [],
+        'Charge' => [],
+        'Pse' => [],
+        'Transfer' => [],
+        'Payout' => [],
+        'Subscription' => []];
 
-    public function save() {
+    public function save()
+    {
         return $this->_update();
     }
 
-    public function delete() {
+    public function delete(): void
+    {
         $this->_delete();
     }
-
 }

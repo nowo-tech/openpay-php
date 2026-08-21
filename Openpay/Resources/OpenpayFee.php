@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Openpay\Resources;
 
 use Openpay\Data\OpenpayApiResourceBase;
-use Openpay\Data\OpenpayApiDerivedResource;
 
 class OpenpayFee extends OpenpayApiResourceBase
 {
-
     protected $authorization;
     protected $creation_date;
     protected $currency;
@@ -18,13 +16,13 @@ class OpenpayFee extends OpenpayApiResourceBase
     protected $transaction_type;
     protected $error_message;
     protected $method;
-    protected $derivedResources = array('Refund' => null);
+    protected $derivedResources = ['Refund' => null];
 
-    public function refund($params) {
+    public function refund($params)
+    {
         $resource = $this->derivedResources['refunds'];
         if ($resource) {
-            return parent::_create($resource->resourceName, $params, array('parent' => $this));
+            return parent::_create($resource->resourceName, $params, ['parent' => $this]);
         }
     }
-
 }

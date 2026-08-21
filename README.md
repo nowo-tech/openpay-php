@@ -1,6 +1,12 @@
+# Openpay PHP SDK (Nowo fork)
+
+[![CI](https://github.com/nowo-tech/openpay-php/actions/workflows/ci.yml/badge.svg)](https://github.com/nowo-tech/openpay-php/actions/workflows/ci.yml) [![Packagist Version](https://img.shields.io/packagist/v/nowo-tech/openpay-php.svg?style=flat)](https://packagist.org/packages/nowo-tech/openpay-php) [![Packagist Downloads](https://img.shields.io/packagist/dt/nowo-tech/openpay-php.svg)](https://packagist.org/packages/nowo-tech/openpay-php) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE) [![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php)](https://php.net) [![Coverage](https://img.shields.io/badge/Coverage-unit%20suite-lightgrey)](#tests-and-coverage)
+
+> ⭐ **Found this useful?** [Install from Packagist](https://packagist.org/packages/nowo-tech/openpay-php) · Give it a **star** on [GitHub](https://github.com/nowo-tech/openpay-php) so more developers can find it.
+
 ![Openpay PHP](https://www.openpay.mx/img/github/php.jpg)
 
-PHP client for Openpay API services (Nowo fork **3.2.0**, based on openpay/sdk 3.1.1)
+PHP client for Openpay API services (Nowo fork **3.2.0**, based on openpay/sdk 3.1.1).
 
 This is a **Nowo fork** of [open-pay/openpay-php](https://github.com/open-pay/openpay-php)
 (`openpay/sdk` 3.1.1). Namespaces stay `Openpay\\`. Extra APIs:
@@ -10,7 +16,26 @@ merchant credentials do not leak across php-fpm / FrankenPHP worker requests.
 After `reset()`, `OPENPAY_*` env vars are ignored until the next `configure()` /
 `getInstance()` / `configureFromEnvironment()`.
 
-Docs: [CHANGELOG](CHANGELOG.md) · [UPGRADING](UPGRADING.md) (3.1.1.1 → 3.2.0).
+![FrankenPHP Friendly Worker Mode](docs/images/frankenphp-friendly.png)
+
+This library is **FrankenPHP worker mode friendly** when you call `Openpay::reset()`
+(or use `OpenpaySession`) at the end of each request.
+
+## Documentation
+
+- [Installation](docs/INSTALLATION.md)
+- [Configuration](docs/CONFIGURATION.md)
+- [Usage](docs/USAGE.md)
+- [Contributing](docs/CONTRIBUTING.md)
+- [Changelog](docs/CHANGELOG.md)
+- [Upgrading](docs/UPGRADING.md)
+- [Release](docs/RELEASE.md)
+- [Security](docs/SECURITY.md)
+- [Engram](docs/ENGRAM.md)
+- [Spec-driven development](docs/SPEC-DRIVEN-DEVELOPMENT.md)
+- [Spec Kit](docs/SPEC-KIT.md)
+- [GitHub CI](docs/GITHUB_CI.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
 
 ```php
 use Openpay\Data\Openpay;
@@ -938,4 +963,28 @@ $customer = $openpay->customers->get('a9ualumwnrcxkl42l6mh');
 $subscription = $customer->subscriptions->get('s7ri24srbldoqqlfo4vp');
 $subscription->delete();
 ````
+
+## Tests and coverage
+
+```bash
+make test
+make test-coverage
+```
+
+PHPUnit lives under `tests/Unit` (credentials, HTTP transport, session, API errors)
+and `tests/Integration` (autoload smoke). Coverage is not yet ~100% of `Openpay/`
+(legacy SDK surface); run `make test-coverage` for the current Lines %.
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE). Upstream copyright remains with Openpay.
+
+## Contributing
+
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Author
+
+Maintained by [Héctor Franco Aceituno](https://github.com/HecFranco) at [Nowo.tech](https://nowo.tech).
+Upstream SDK by [Openpay](https://www.openpay.mx/).
 
