@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Resources;
 
 use Openpay\Data\OpenpayApiResourceBase;
@@ -26,5 +28,3 @@ class OpenpayFee extends OpenpayApiResourceBase
     }
 
 }
-
-?>

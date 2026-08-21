@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Resources;
 
 use Openpay\Data\OpenpayApiResourceBase;
@@ -19,5 +21,3 @@ class OpenpayPayout extends OpenpayApiResourceBase {
 	// TODO: checar porque no instancia Openpaycard al recibir el parametro
 	protected $card;
 }
-
-?>

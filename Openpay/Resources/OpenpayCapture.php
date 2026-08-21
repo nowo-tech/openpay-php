@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Resources;
 
 use Openpay\Data\OpenpayApiResourceBase;
@@ -9,4 +11,3 @@ class OpenpayCapture extends OpenpayApiResourceBase {
 		return parent::getResourceUrlName(false);
 	}
 }
-?>
