@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Resources;
 
 use Openpay\Data\OpenpayApiResourceBase;
@@ -12,5 +14,3 @@ class OpenpayToken extends OpenpayApiResourceBase
         return $this->_getAttributes($param);
     }
 }
-
-?>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Resources;
 
 
@@ -16,4 +18,3 @@ class OpenpayTransfer extends OpenpayApiResourceBase {
 	protected $error_message;
 	protected $method;
 }
-?>

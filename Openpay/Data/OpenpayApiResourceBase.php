@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Data;
 
 abstract class OpenpayApiResourceBase
@@ -348,8 +350,8 @@ abstract class OpenpayApiResourceBase
     // --------------------  MAGIC METHODS  --------------------
 
     public function __set($key, $value) {
-        OpenpayApiConsole::trace('OpenpayApiResourceBase @__set > '.$key.' = '.$value);
-        if ($value === '' || !$value) {
+        OpenpayApiConsole::trace('OpenpayApiResourceBase @__set > '.$key);
+        if ($value === '' || $value === null) {
             error_log("[OPENPAY Notice] The property '".$key."' will be set to en empty string which will be intepreted ad a NULL in request");
         }
         if (isset($this->$key) && is_array($value)) {
@@ -382,5 +384,3 @@ abstract class OpenpayApiResourceBase
     }
 
 }
-
-?>

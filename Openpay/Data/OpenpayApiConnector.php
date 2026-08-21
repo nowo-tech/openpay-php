@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Data;
 
 use Openpay\Data\Openpay as Openpay;
@@ -72,10 +74,11 @@ class OpenpayApiConnector
 
         $userAgent = Openpay::getUserAgent();
 
-        if (empty($userAgent))
-            $headers = array('User-Agent: OpenpayPhp/v2');
-        else
-            $headers = array('User-Agent: ' . $userAgent);
+        if (empty($userAgent)) {
+            $headers = ['User-Agent: OpenpayPhp/' . Openpay::VERSION];
+        } else {
+            $headers = ['User-Agent: ' . $userAgent];
+        }
 
         array_push($headers, 'X-Forwarded-For: ' . $publicIp);
 
@@ -152,8 +155,7 @@ class OpenpayApiConnector
             OpenpayApiConsole::warn('Response body is not an UTF-8 string');
         }
 
-        OpenpayApiConsole::debug('cURL body: ' . $rbody);
-        OpenpayApiConsole::debug('cURL code: ' . $rcode);
+        OpenpayApiConsole::debug('cURL HTTP status: ' . $rcode);
 
         return array($rbody, $rcode);
     }
@@ -176,23 +178,20 @@ class OpenpayApiConnector
             if (is_array($v)) {
                 $r[] = $this->encodeToQueryString($v, $k);
             } else {
-                $r[] = urlencode($k) . "=" . urlencode($v);
+                $r[] = urlencode((string) $k) . "=" . urlencode((string) $v);
             }
         }
         $string = implode("&", $r);
-        OpenpayApiConsole::debug('Query string: ' . $string);
         return $string;
     }
 
     private function encodeToJson($arr)
     {
         try {
-            $encoded = json_encode($arr, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+            return json_encode($arr, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
         } catch (\JsonException $e) {
             throw new OpenpayApiError('Failed to encode request as JSON: ' . $e->getMessage());
         }
-        OpenpayApiConsole::debug('JSON UTF8 string: ' . $encoded);
-        return $encoded;
     }
 
     private function interpretResponse($responseBody, $responseCode)
@@ -297,5 +296,3 @@ class OpenpayApiConnector
     }
 
 }
-
-?>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Resources;
 
 
@@ -37,4 +39,3 @@ class OpenpaySubscription extends OpenpayApiResourceBase {
 		}
 	}
 }
-?>
