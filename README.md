@@ -1,8 +1,8 @@
 # Openpay PHP SDK (Nowo fork)
 
-[![CI](https://github.com/nowo-tech/openpay-php/actions/workflows/ci.yml/badge.svg)](https://github.com/nowo-tech/openpay-php/actions/workflows/ci.yml) [![Packagist Version](https://img.shields.io/packagist/v/nowo-tech/openpay-php.svg?style=flat)](https://packagist.org/packages/nowo-tech/openpay-php) [![Packagist Downloads](https://img.shields.io/packagist/dt/nowo-tech/openpay-php.svg)](https://packagist.org/packages/nowo-tech/openpay-php) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE) [![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php)](https://php.net) [![Coverage](https://img.shields.io/badge/Coverage-unit%20suite-lightgrey)](#tests-and-coverage)
+[![CI](https://github.com/nowo-tech/OpenpayPhp/actions/workflows/ci.yml/badge.svg)](https://github.com/nowo-tech/OpenpayPhp/actions/workflows/ci.yml) [![Packagist Version](https://img.shields.io/packagist/v/nowo-tech/openpay-php.svg?style=flat)](https://packagist.org/packages/nowo-tech/openpay-php) [![Packagist Downloads](https://img.shields.io/packagist/dt/nowo-tech/openpay-php.svg)](https://packagist.org/packages/nowo-tech/openpay-php) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE) [![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php)](https://php.net) [![GitHub stars](https://img.shields.io/github/stars/nowo-tech/openpay-php.svg?style=social&label=Star)](https://github.com/nowo-tech/OpenpayPhp)
 
-> ⭐ **Found this useful?** [Install from Packagist](https://packagist.org/packages/nowo-tech/openpay-php) · Give it a **star** on [GitHub](https://github.com/nowo-tech/openpay-php) so more developers can find it.
+> ⭐ **Found this useful?** [Install from Packagist](https://packagist.org/packages/nowo-tech/openpay-php) · Give it a **star** on [GitHub](https://github.com/nowo-tech/OpenpayPhp) so more developers can find it.
 
 ![Openpay PHP](https://www.openpay.mx/img/github/php.jpg)
 
@@ -34,6 +34,7 @@ This library is **FrankenPHP worker mode friendly** when you call `Openpay::rese
 - [Engram](docs/ENGRAM.md)
 - [Spec-driven development](docs/SPEC-DRIVEN-DEVELOPMENT.md)
 - [Spec Kit](docs/SPEC-KIT.md)
+- [Coverage](docs/COVERAGE.md)
 - [GitHub CI](docs/GITHUB_CI.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 
@@ -971,9 +972,11 @@ make test
 make test-coverage
 ```
 
-PHPUnit lives under `tests/Unit` (credentials, HTTP transport, session, API errors)
-and `tests/Integration` (autoload smoke). Coverage is not yet ~100% of `Openpay/`
-(legacy SDK surface); run `make test-coverage` for the current Lines %.
+- PHP: 99.63%
+- TS/JS: N/A
+- Python: N/A
+
+PHPUnit lives under `tests/Unit` and `tests/Integration`. Clover is `coverage.xml` (REQ-TEST-003 ≥ 99% Lines). See [docs/COVERAGE.md](docs/COVERAGE.md).
 
 ## License
 

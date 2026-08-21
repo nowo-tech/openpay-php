@@ -46,9 +46,9 @@ class OpenpayApiConnector
 
     private function _request($method, $url, $params)
     {
-        if (!class_exists('Openpay\\Data\\Openpay')) {
+        if (!class_exists('Openpay\\Data\\Openpay')) { // @codeCoverageIgnoreStart
             throw new OpenpayApiError('Library install error, there are some missing classes');
-        }
+        } // @codeCoverageIgnoreEnd
         OpenpayApiConsole::trace('OpenpayApiConnector @_request');
 
         $myId = Openpay::getId();
@@ -178,7 +178,7 @@ class OpenpayApiConnector
             OpenpayApiConsole::error('Request finished with HTTP code '.$responseCode);
             $this->handleRequestError($responseBody, $responseCode, $traslatedResponse);
 
-            return [];
+            return []; // @codeCoverageIgnore
         }
 
         return $traslatedResponse;
