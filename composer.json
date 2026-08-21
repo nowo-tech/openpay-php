@@ -1,9 +1,7 @@
 {
-    "name": "openpay/sdk",
-    "description": "This is a client implementing the payment services for Openpay at openpay.mx (Nowo fork: reset/configure for request-safe credentials)",
-    "version": "3.1.1",
+    "name": "nowo-tech/openpay-php",
+    "description": "Openpay PHP SDK fork with request-safe credentials (configure/reset) for php-fpm and FrankenPHP worker. Drop-in replacement for openpay/sdk 3.1.1.",
     "type": "library",
-    "minimum-stability": "dev",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -25,6 +23,9 @@
         "php": ">=8.1",
         "ext-curl": "*",
         "ext-hash": "*"
+    },
+    "replace": {
+        "openpay/sdk": "3.1.1"
     },
     "support": {
         "issues": "https://github.com/nowo-tech/openpay-php/issues",
