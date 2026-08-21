@@ -15,13 +15,14 @@ class OpenpayApiError extends Exception
     protected $fraud_rules;
 
     public function __construct($message = null, $error_code = 0, $category = null, $request_id = null, $http_code = null, $fraud_rules = null) {
-        parent::__construct($message, $error_code);
+        $exceptionCode = is_numeric($error_code) ? (int) $error_code : 0;
+        parent::__construct((string) ($message ?? ''), $exceptionCode);
         $this->description = $message;
-        $this->error_code = isset($error_code) ? $error_code : 0;
-        $this->category = isset($category) ? $category : '';
-        $this->http_code = isset($http_code) ? $http_code : 0;
-        $this->request_id = isset($request_id) ? $request_id : '';
-        $this->fraud_rules = isset($fraud_rules) ? $fraud_rules : array();
+        $this->error_code = $error_code ?? 0;
+        $this->category = $category ?? '';
+        $this->http_code = $http_code ?? 0;
+        $this->request_id = $request_id ?? '';
+        $this->fraud_rules = $fraud_rules ?? array();
     }
 
     public function getDescription() {

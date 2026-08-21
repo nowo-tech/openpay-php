@@ -182,14 +182,11 @@ abstract class OpenpayApiResourceBase
         if (count($removed)) {
             OpenpayApiConsole::debug('OpenpayApiResourceBase @refreshData > removing unused data');
             foreach ($removed as $k) {
-                if ($this->serializableData[$k]) {
+                if (isset($this->serializableData[$k])) {
                     unset($this->serializableData[$k]);
                 }
-                if ($this->noSerializableData[$k]) {
+                if (isset($this->noSerializableData[$k])) {
                     $this->noSerializableData[$k] = null;
-                }
-                if ($this->derivedResources[$k]) {
-                    //$this->derivedResources[$k] = null;
                 }
             }
         }
