@@ -112,7 +112,7 @@ final class OpenpayCredentialsTest extends TestCase
 
     public function testSdkVersionConstant(): void
     {
-        self::assertSame('3.1.1', Openpay::VERSION);
+        self::assertSame('3.2.0', Openpay::VERSION);
     }
 
     public function testConnectorResetIsIdempotent(): void

@@ -1,6 +1,6 @@
 {
     "name": "nowo-tech/openpay-php",
-    "description": "Openpay PHP SDK fork with request-safe credentials (configure/reset) for php-fpm and FrankenPHP worker. Drop-in replacement for openpay/sdk 3.1.1.",
+    "description": "Openpay PHP SDK fork 3.2.0 with request-safe credentials (configure/reset/OpenpaySession) for php-fpm and FrankenPHP worker. Drop-in replacement for openpay/sdk 3.1.1.",
     "type": "library",
     "license": "Apache-2.0",
     "authors": [
