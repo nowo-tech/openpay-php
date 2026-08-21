@@ -73,6 +73,11 @@ class Openpay
         OpenpayApiConnector::reset();
     }
 
+    public static function setHttpTransport(?OpenpayHttpTransport $transport): void
+    {
+        OpenpayApiConnector::setTransport($transport);
+    }
+
     /**
      * Overwrites static credentials for the next API calls (no merge with previous merchant).
      */
