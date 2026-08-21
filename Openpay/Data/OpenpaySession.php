@@ -22,13 +22,15 @@ final class OpenpaySession
 
     /**
      * @template T
+     *
      * @param callable(OpenpayApi): T $callback
+     *
      * @return T
      */
     public function run(callable $callback): mixed
     {
         Openpay::configure($this->id, $this->apiKey, $this->country, $this->publicIp);
-        if ($this->transport !== null) {
+        if (null !== $this->transport) {
             Openpay::setHttpTransport($this->transport);
         }
 

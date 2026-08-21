@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Openpay\Data;
 
-use Openpay\Data\Openpay as Openpay;
-
 class OpenpayApiConnector
 {
-
     private static $instance;
 
     private static ?OpenpayHttpTransport $transport = null;
@@ -25,6 +22,7 @@ class OpenpayApiConnector
         if (!self::$instance) {
             self::$instance = new self();
         }
+
         return self::$instance;
     }
 
@@ -34,7 +32,7 @@ class OpenpayApiConnector
      */
     public static function reset(): void
     {
-        self::$instance  = null;
+        self::$instance = null;
         self::$transport = null;
     }
 
@@ -49,50 +47,51 @@ class OpenpayApiConnector
     private function _request($method, $url, $params)
     {
         if (!class_exists('Openpay\\Data\\Openpay')) {
-            throw new OpenpayApiError("Library install error, there are some missing classes");
+            throw new OpenpayApiError('Library install error, there are some missing classes');
         }
         OpenpayApiConsole::trace('OpenpayApiConnector @_request');
 
         $myId = Openpay::getId();
         if (!$myId) {
-            throw new OpenpayApiAuthError("Empty or no Merchant ID provided");
-        } else if (!preg_match('/^[a-z0-9]{20}$/i', $myId)) {
-            throw new OpenpayApiAuthError("Invalid Merchant ID '" . $myId . "'");
+            throw new OpenpayApiAuthError('Empty or no Merchant ID provided');
+        } elseif (!preg_match('/^[a-z0-9]{20}$/i', $myId)) {
+            throw new OpenpayApiAuthError("Invalid Merchant ID '".$myId."'");
         }
 
         $myApiKey = Openpay::getApiKey();
         if (!$myApiKey) {
-            throw new OpenpayApiAuthError("Empty or no Private Key provided");
-        } else if (!preg_match('/^sk_[a-z0-9]{32}$/i', $myApiKey)) {
-            throw new OpenpayApiAuthError("Invalid Private Key '" . $myApiKey . "'");
+            throw new OpenpayApiAuthError('Empty or no Private Key provided');
+        } elseif (!preg_match('/^sk_[a-z0-9]{32}$/i', $myApiKey)) {
+            throw new OpenpayApiAuthError("Invalid Private Key '".$myApiKey."'");
         }
 
         $publicIp = Openpay::getPublicIp();
-        if(is_null($publicIp)){
-            throw new OpenpayApiAuthError("Empty or no public ip provided");
-        } else if (!filter_var($publicIp, FILTER_VALIDATE_IP)){
-            throw new OpenpayApiAuthError("Invalid public ip '" . $publicIp . "'");
+        if (null === $publicIp) {
+            throw new OpenpayApiAuthError('Empty or no public ip provided');
+        } elseif (!filter_var($publicIp, \FILTER_VALIDATE_IP)) {
+            throw new OpenpayApiAuthError("Invalid public ip '".$publicIp."'");
         }
 
         $absUrl = Openpay::getEndpointUrl();
         if (!$absUrl) {
-            throw new OpenpayApiConnectionError("No API endpoint set");
+            throw new OpenpayApiConnectionError('No API endpoint set');
         }
-        $absUrl .= '/' . $myId . $url;
+        $absUrl .= '/'.$myId.$url;
 
-        //$params = self::_encodeObjects($params);
+        // $params = self::_encodeObjects($params);
 
         $userAgent = Openpay::getUserAgent();
 
         if (empty($userAgent)) {
-            $headers = ['User-Agent: OpenpayPhp/' . Openpay::VERSION];
+            $headers = ['User-Agent: OpenpayPhp/'.Openpay::VERSION];
         } else {
-            $headers = ['User-Agent: ' . $userAgent];
+            $headers = ['User-Agent: '.$userAgent];
         }
 
-        array_push($headers, 'X-Forwarded-For: ' . $publicIp);
+        $headers[] = 'X-Forwarded-For: '.$publicIp;
 
-        list($rbody, $rcode) = $this->dispatch($method, $absUrl, $headers, $params, $myApiKey);
+        [$rbody, $rcode] = $this->dispatch($method, $absUrl, $headers, $params, $myApiKey);
+
         return $this->interpretResponse($rbody, $rcode);
     }
 
@@ -105,20 +104,20 @@ class OpenpayApiConnector
     {
         $body = null;
 
-        if ($method === 'get') {
-            if (count($params) > 0) {
-                $absUrl .= '?' . $this->encodeToQueryString($params);
+        if ('get' === $method) {
+            if (\count($params) > 0) {
+                $absUrl .= '?'.$this->encodeToQueryString($params);
             }
-        } elseif ($method === 'post' || $method === 'put') {
-            $body     = $this->encodeToJson($params);
+        } elseif ('post' === $method || 'put' === $method) {
+            $body = $this->encodeToJson($params);
             $headers[] = 'Content-Type: application/json';
-            $headers[] = 'Content-Length: ' . strlen($body);
-        } elseif ($method === 'delete') {
-            if (count($params) > 0) {
-                $absUrl .= '?' . $this->encodeToQueryString($params);
+            $headers[] = 'Content-Length: '.\strlen($body);
+        } elseif ('delete' === $method) {
+            if (\count($params) > 0) {
+                $absUrl .= '?'.$this->encodeToQueryString($params);
             }
         } else {
-            throw new OpenpayApiError("Invalid request method '" . $method . "'");
+            throw new OpenpayApiError("Invalid request method '".$method."'");
         }
 
         return $this->transport()->send($method, $absUrl, $headers, $body, $auth);
@@ -126,35 +125,39 @@ class OpenpayApiConnector
 
     private function encodeToQueryString($arr, $prefix = null)
     {
-        if (!is_array($arr))
+        if (!\is_array($arr)) {
             return $arr;
+        }
 
-        $r = array();
+        $r = [];
         foreach ($arr as $k => $v) {
-            if (is_null($v))
+            if (null === $v) {
                 continue;
+            }
 
-            if ($prefix && $k && !is_int($k))
-                $k = $prefix . "[" . $k . "]";
-            else if ($prefix)
-                $k = $prefix . "[]";
+            if ($prefix && $k && !\is_int($k)) {
+                $k = $prefix.'['.$k.']';
+            } elseif ($prefix) {
+                $k = $prefix.'[]';
+            }
 
-            if (is_array($v)) {
+            if (\is_array($v)) {
                 $r[] = $this->encodeToQueryString($v, $k);
             } else {
-                $r[] = urlencode((string) $k) . "=" . urlencode((string) $v);
+                $r[] = urlencode((string) $k).'='.urlencode((string) $v);
             }
         }
-        $string = implode("&", $r);
+        $string = implode('&', $r);
+
         return $string;
     }
 
     private function encodeToJson($arr)
     {
         try {
-            return json_encode($arr, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+            return json_encode($arr, \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_UNICODE);
         } catch (\JsonException $e) {
-            throw new OpenpayApiError('Failed to encode request as JSON: ' . $e->getMessage());
+            throw new OpenpayApiError('Failed to encode request as JSON: '.$e->getMessage());
         }
     }
 
@@ -163,43 +166,44 @@ class OpenpayApiConnector
         OpenpayApiConsole::trace('OpenpayApiConnector @interpretResponse');
         try {
             if (!empty($responseBody)) {
-                $traslatedResponse = json_decode($responseBody, true, 512, JSON_THROW_ON_ERROR);
+                $traslatedResponse = json_decode($responseBody, true, 512, \JSON_THROW_ON_ERROR);
             } else {
-                $traslatedResponse = array();
+                $traslatedResponse = [];
             }
         } catch (\JsonException $e) {
-            throw new OpenpayApiRequestError('Invalid response: ' . $responseBody, $responseCode);
+            throw new OpenpayApiRequestError('Invalid response: '.$responseBody, $responseCode);
         }
 
         if ($responseCode < 200 || $responseCode >= 300) {
-            OpenpayApiConsole::error('Request finished with HTTP code ' . $responseCode);
+            OpenpayApiConsole::error('Request finished with HTTP code '.$responseCode);
             $this->handleRequestError($responseBody, $responseCode, $traslatedResponse);
-            return array();
+
+            return [];
         }
+
         return $traslatedResponse;
     }
 
-    private function handleRequestError($responseBody, $responseCode, $traslatedResponse)
+    private function handleRequestError($responseBody, $responseCode, $traslatedResponse): void
     {
-        if (!is_array($traslatedResponse) || !isset($traslatedResponse['error_code'])) {
-            throw new OpenpayApiRequestError("Invalid response body received from Openpay API Server");
+        if (!\is_array($traslatedResponse) || !isset($traslatedResponse['error_code'])) {
+            throw new OpenpayApiRequestError('Invalid response body received from Openpay API Server');
         }
 
-        $message = isset($traslatedResponse['description']) ? $traslatedResponse['description'] : 'No description';
+        $message = $traslatedResponse['description'] ?? 'No description';
         $error = $traslatedResponse['error_code'];
-        $category = isset($traslatedResponse['category']) ? $traslatedResponse['category'] : null;
-        $request_id = isset($traslatedResponse['request_id']) ? $traslatedResponse['request_id'] : null;
-        $fraud_rules = isset($traslatedResponse['fraud_rules']) ? $traslatedResponse['fraud_rules'] : null;
+        $category = $traslatedResponse['category'] ?? null;
+        $request_id = $traslatedResponse['request_id'] ?? null;
+        $fraud_rules = $traslatedResponse['fraud_rules'] ?? null;
 
         switch ($responseCode) {
-
             // Unauthorized - Forbidden
             case 401:
             case 403:
                 throw new OpenpayApiAuthError($message, $error, $category, $request_id, $responseCode, $fraud_rules);
                 break;
 
-            // Bad Request - Request Entity too large - Request Entity too large - Internal Server Error - Service Unavailable
+                // Bad Request - Request Entity too large - Request Entity too large - Internal Server Error - Service Unavailable
             case 400:
             case 404:
             case 413:
@@ -209,7 +213,7 @@ class OpenpayApiConnector
                 throw new OpenpayApiRequestError($message, $error, $category, $request_id, $responseCode, $fraud_rules);
                 break;
 
-            // Payment Required - Conflict - Preconditon Failed - Unprocessable Entity - Locked
+                // Payment Required - Conflict - Preconditon Failed - Unprocessable Entity - Locked
             case 402:
             case 409:
             case 412:
@@ -217,7 +221,7 @@ class OpenpayApiConnector
                 throw new OpenpayApiTransactionError($message, $error, $category, $request_id, $responseCode, $fraud_rules);
                 break;
 
-            // Not Found
+                // Not Found
             default:
                 throw new OpenpayApiError($message, $error, $category, $request_id, $responseCode, $fraud_rules);
         }
@@ -228,19 +232,19 @@ class OpenpayApiConnector
 
     public static function request($method, $url, $params = null)
     {
-        OpenpayApiConsole::trace('OpenpayApiConnector @request ' . $url);
+        OpenpayApiConsole::trace('OpenpayApiConnector @request '.$url);
 
         if (!$params) {
-            $params = array();
+            $params = [];
         }
 
         $method = strtolower($method);
-        if (!in_array($method, array('get', 'post', 'delete', 'put'))) {
-            throw new OpenpayApiError("Invalid request method '" . $method . "'");
+        if (!\in_array($method, ['get', 'post', 'delete', 'put'])) {
+            throw new OpenpayApiError("Invalid request method '".$method."'");
         }
 
         $connector = self::getInstance();
+
         return $connector->_request($method, $url, $params);
     }
-
 }

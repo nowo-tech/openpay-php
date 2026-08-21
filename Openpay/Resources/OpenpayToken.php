@@ -10,7 +10,8 @@ class OpenpayToken extends OpenpayApiResourceBase
 {
     protected $card;
 
-    public function get($param) {
+    public function get($param)
+    {
         return $this->_getAttributes($param);
     }
 }

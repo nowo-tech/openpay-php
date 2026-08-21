@@ -16,15 +16,15 @@ class Openpay
 {
     public const VERSION = '3.2.0';
 
-    private static $instance = null;
+    private static $instance;
 
-    private static $id = null;
+    private static $id;
 
-    private static $apiKey = null;
+    private static $apiKey;
 
     private static $userAgent = '';
 
-    private static $country = null;
+    private static $country;
 
     private static string $apiEndpoint = '';
 
@@ -34,7 +34,7 @@ class Openpay
 
     private static $classification = '';
 
-    private static $publicIp = null;
+    private static $publicIp;
 
     /**
      * When true, empty static id/key fall back to OPENPAY_MERCHANT_ID / OPENPAY_API_KEY.
@@ -58,17 +58,17 @@ class Openpay
      */
     public static function reset(): void
     {
-        self::$instance                     = null;
-        self::$id                           = null;
-        self::$apiKey                       = null;
-        self::$userAgent                    = '';
-        self::$country                      = null;
-        self::$apiEndpoint                  = '';
-        self::$apiSandboxEndpoint           = '';
-        self::$sandboxMode                  = true;
-        self::$classification               = '';
-        self::$publicIp                     = null;
-        self::$useEnvironmentCredentials    = false;
+        self::$instance = null;
+        self::$id = null;
+        self::$apiKey = null;
+        self::$userAgent = '';
+        self::$country = null;
+        self::$apiEndpoint = '';
+        self::$apiSandboxEndpoint = '';
+        self::$sandboxMode = true;
+        self::$classification = '';
+        self::$publicIp = null;
+        self::$useEnvironmentCredentials = false;
         self::$useEnvironmentProductionMode = false;
         OpenpayApiConnector::reset();
     }
@@ -83,12 +83,12 @@ class Openpay
      */
     public static function configure(string $id, string $apiKey, string $country = 'MX', string $publicIp = '127.0.0.1'): void
     {
-        self::$useEnvironmentCredentials    = false;
+        self::$useEnvironmentCredentials = false;
         self::$useEnvironmentProductionMode = false;
-        self::$id                           = $id;
-        self::$apiKey                       = $apiKey;
-        self::$country                      = $country;
-        self::$publicIp                     = $publicIp;
+        self::$id = $id;
+        self::$apiKey = $apiKey;
+        self::$country = $country;
+        self::$publicIp = $publicIp;
         self::setEndpointUrl($country);
     }
 
@@ -98,26 +98,26 @@ class Openpay
      */
     public static function configureFromEnvironment(): void
     {
-        $id       = self::envString('OPENPAY_MERCHANT_ID');
-        $apiKey   = self::envString('OPENPAY_API_KEY');
-        $country  = self::envString('OPENPAY_COUNTRY') ?? 'MX';
+        $id = self::envString('OPENPAY_MERCHANT_ID');
+        $apiKey = self::envString('OPENPAY_API_KEY');
+        $country = self::envString('OPENPAY_COUNTRY') ?? 'MX';
         $publicIp = self::envString('OPENPAY_PUBLIC_IP') ?? '127.0.0.1';
 
-        if ($id !== null && $apiKey !== null) {
+        if (null !== $id && null !== $apiKey) {
             self::configure($id, $apiKey, $country, $publicIp);
         } else {
-            self::$useEnvironmentCredentials    = false;
+            self::$useEnvironmentCredentials = false;
             self::$useEnvironmentProductionMode = false;
-            self::$id                           = $id;
-            self::$apiKey                       = $apiKey;
-            self::$country                      = $country;
-            self::$publicIp                     = $publicIp;
+            self::$id = $id;
+            self::$apiKey = $apiKey;
+            self::$country = $country;
+            self::$publicIp = $publicIp;
             self::setEndpointUrl($country);
         }
 
         $production = self::envString('OPENPAY_PRODUCTION_MODE');
-        if ($production !== null) {
-            self::$sandboxMode = strtoupper($production) === 'FALSE';
+        if (null !== $production) {
+            self::$sandboxMode = 'FALSE' === strtoupper($production);
         }
     }
 
@@ -125,7 +125,7 @@ class Openpay
     {
         $value = getenv($name);
 
-        if ($value === false || $value === '') {
+        if (false === $value || '' === $value) {
             return null;
         }
 
@@ -134,8 +134,8 @@ class Openpay
 
     public static function getInstance(string $id, string $apiKey, ?string $country = '', ?string $publicIp = null)
     {
-        $country  = ($country !== null && $country !== '') ? $country : 'MX';
-        $publicIp = $publicIp ?? '127.0.0.1';
+        $country = (null !== $country && '' !== $country) ? $country : 'MX';
+        $publicIp ??= '127.0.0.1';
 
         self::configure($id, $apiKey, $country, $publicIp);
 
@@ -144,7 +144,7 @@ class Openpay
 
     public static function setUserAgent($userAgent): void
     {
-        if ($userAgent !== '') {
+        if ('' !== $userAgent) {
             self::$userAgent = $userAgent;
         }
     }
@@ -156,7 +156,7 @@ class Openpay
 
     public static function setClassificationMerchant($classification): void
     {
-        if ($classification !== '') {
+        if ('' !== $classification) {
             self::$classification = $classification;
         }
     }
@@ -168,9 +168,9 @@ class Openpay
 
     public static function setApiKey($key = ''): void
     {
-        if ($key !== '') {
+        if ('' !== $key) {
             self::$useEnvironmentCredentials = false;
-            self::$apiKey                    = $key;
+            self::$apiKey = $key;
         }
     }
 
@@ -185,15 +185,15 @@ class Openpay
 
     public static function setId($id = ''): void
     {
-        if ($id !== '') {
+        if ('' !== $id) {
             self::$useEnvironmentCredentials = false;
-            self::$id                        = $id;
+            self::$id = $id;
         }
     }
 
     public static function setCountry($country = ''): void
     {
-        if ($country !== '') {
+        if ('' !== $country) {
             self::$country = $country;
         }
     }
@@ -228,8 +228,8 @@ class Openpay
     {
         if (self::$useEnvironmentProductionMode) {
             $production = self::envString('OPENPAY_PRODUCTION_MODE');
-            if ($production !== null) {
-                return strtoupper($production) === 'FALSE';
+            if (null !== $production) {
+                return 'FALSE' === strtoupper($production);
             }
         }
 
@@ -239,7 +239,7 @@ class Openpay
     public static function setSandboxMode($mode): void
     {
         self::$useEnvironmentProductionMode = false;
-        self::$sandboxMode                  = (bool) $mode;
+        self::$sandboxMode = (bool) $mode;
     }
 
     public static function getProductionMode(): bool
@@ -250,24 +250,24 @@ class Openpay
     public static function setProductionMode($mode): void
     {
         self::$useEnvironmentProductionMode = false;
-        self::$sandboxMode                  = !(bool) $mode;
+        self::$sandboxMode = !(bool) $mode;
     }
 
     public static function setEndpointUrl($country): void
     {
-        if ($country === 'MX') {
-            if (self::getClassificationMerchant() !== 'eglobal') {
-                self::$apiEndpoint        = 'https://api.openpay.mx/v1';
+        if ('MX' === $country) {
+            if ('eglobal' !== self::getClassificationMerchant()) {
+                self::$apiEndpoint = 'https://api.openpay.mx/v1';
                 self::$apiSandboxEndpoint = 'https://sandbox-api.openpay.mx/v1';
             } else {
-                self::$apiEndpoint        = 'https://api.ecommercebbva.com/v1';
+                self::$apiEndpoint = 'https://api.ecommercebbva.com/v1';
                 self::$apiSandboxEndpoint = 'https://sand-api.ecommercebbva.com/v1';
             }
-        } elseif ($country === 'CO') {
-            self::$apiEndpoint        = 'https://api.openpay.co/v1';
+        } elseif ('CO' === $country) {
+            self::$apiEndpoint = 'https://api.openpay.co/v1';
             self::$apiSandboxEndpoint = 'https://sandbox-api.openpay.co/v1';
-        } elseif ($country === 'PE') {
-            self::$apiEndpoint        = 'https://api.openpay.pe/v1';
+        } elseif ('PE' === $country) {
+            self::$apiEndpoint = 'https://api.openpay.pe/v1';
             self::$apiSandboxEndpoint = 'https://sandbox-api.openpay.pe/v1';
         }
     }
