@@ -10,6 +10,10 @@ The Composer package is `nowo-tech/openpay-php`. It still `replace`s upstream
 
 ## [Unreleased]
 
+### Changed
+
+- Spec Kit baseline (`specs/001-baseline/`) aligned with shipped **3.2.1**: env/TLS/CI FRs, edge cases, constitution principle VI (scoped PHPStan/Rector).
+
 ## [3.2.1] - 2026-08-21
 
 Patch on **3.2.0**: Nowo REQ-* scaffold, coverage gate, and a PHP 8 cache-id fix.

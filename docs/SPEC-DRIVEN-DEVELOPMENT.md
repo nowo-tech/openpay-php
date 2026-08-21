@@ -8,8 +8,9 @@ plus a GitHub Spec Kit baseline under `specs/001-baseline/`.
 
 - Drop-in Composer replacement for `openpay/sdk` 3.1.1 (`Openpay\\` namespaces).
 - Request-safe merchant credentials on php-fpm and FrankenPHP workers.
-- Injectable HTTP transport with explicit timeouts.
-- PHP 8.3+, PHPUnit, PHP-CS-Fixer, Rector, PHPStan (FrankenPHP rulesets).
+- Injectable HTTP transport with explicit timeouts and OS-store TLS.
+- PHP 8.3+, PHPUnit (Clover Lines ≥ 99%), PHP-CS-Fixer, scoped Rector/PHPStan.
+- Current release **3.2.1** (tag `v3.2.1`); GitHub `nowo-tech/OpenpayPhp`.
 
 ## User stories
 
@@ -33,8 +34,8 @@ plus a GitHub Spec Kit baseline under `specs/001-baseline/`.
 
 ## Layers
 
-1. **Constitution** — `.specify/memory/constitution.md`
-2. **Baseline spec** — `specs/001-baseline/`
+1. **Constitution** — `.specify/memory/constitution.md` (v1.1.0)
+2. **Baseline spec** — `specs/001-baseline/` (shipped 3.2.1)
 3. **Implementation** — `Openpay/`, `Openpay.php`, `tests/`
 
-Validation: PHPUnit, PHPStan, PHP-CS-Fixer, Rector dry-run.
+Validation: `make release-check` (PHPUnit, PHPStan, PHP-CS-Fixer, Rector dry-run, coverage gate).
