@@ -28,6 +28,7 @@ class OpenpayApiDerivedResource extends OpenpayApiResourceBase
         } else {
             $id = \count($this->cacheList) + 1;
         }
+        $id = strtolower((string) $id);
         if (!$this->isResourceListed($id)) {
             $resource->parent = $this;
             $this->cacheList[$id] = $resource;
@@ -36,7 +37,7 @@ class OpenpayApiDerivedResource extends OpenpayApiResourceBase
 
     protected function getResource($id)
     {
-        $id = strtolower($id);
+        $id = strtolower((string) $id);
         if ($this->isResourceListed($id)) {
             return $this->cacheList[$id];
         }
@@ -44,7 +45,7 @@ class OpenpayApiDerivedResource extends OpenpayApiResourceBase
 
     protected function removeResource($id): void
     {
-        $id = strtolower($id);
+        $id = strtolower((string) $id);
         if ($this->isResourceListed($id)) {
             unset($this->cacheList[$id]);
         }
@@ -52,7 +53,7 @@ class OpenpayApiDerivedResource extends OpenpayApiResourceBase
 
     protected function isResourceListed($id)
     {
-        $id = strtolower($id);
+        $id = strtolower((string) $id);
 
         return isset($this->cacheList[$id]) && !empty($this->cacheList[$id]);
     }

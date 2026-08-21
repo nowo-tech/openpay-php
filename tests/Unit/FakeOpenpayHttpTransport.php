@@ -15,6 +15,14 @@ final class FakeOpenpayHttpTransport implements OpenpayHttpTransport
 
     public int $status = 200;
 
+    /** @var list<array{0: string, 1: int}> */
+    public array $queue = [];
+
+    public function enqueue(string $body, int $status = 200): void
+    {
+        $this->queue[] = [$body, $status];
+    }
+
     public function send(string $method, string $url, array $headers, ?string $body, ?string $auth): array
     {
         $this->calls[] = [
@@ -24,6 +32,10 @@ final class FakeOpenpayHttpTransport implements OpenpayHttpTransport
             'body' => $body,
             'auth' => $auth,
         ];
+
+        if ([] !== $this->queue) {
+            return array_shift($this->queue);
+        }
 
         return [$this->body, $this->status];
     }

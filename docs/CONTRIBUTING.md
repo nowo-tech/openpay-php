@@ -16,13 +16,19 @@ at [Nowo.tech](https://nowo.tech).
 ## Development setup
 
 ```bash
-git clone git@github.com:nowo-tech/openpay-php.git
-cd openpay-php
+git clone git@github.com:nowo-tech/OpenpayPhp.git
+cd OpenpayPhp
+make setup-hooks
 make up
 make test
 ```
 
 Without Docker: PHP 8.3+, Composer, `composer install`, `composer test`.
+
+Install git hooks with `make setup-hooks` before committing. Run
+`make check-no-cursor-coauthor` before every push. If CI `git-hygiene`
+fails on historical trailers, run `make strip-cursor-coauthor-from-history`
+(then force-push only with maintainer approval).
 
 ## Pull requests
 

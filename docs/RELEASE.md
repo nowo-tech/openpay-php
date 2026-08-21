@@ -8,6 +8,7 @@ Use this checklist when cutting a new version.
 ## Before releasing
 
 - [ ] `make release-check` (style, Rector dry-run, PHPStan, tests, coverage)
+- [ ] After the release commit and **before** `git push`, run `make check-no-cursor-coauthor` again (REQ-GIT-001)
 - [ ] Update [docs/CHANGELOG.md](CHANGELOG.md): move `[Unreleased]` to `[X.Y.Z] - YYYY-MM-DD`
 - [ ] Update [docs/UPGRADING.md](UPGRADING.md) if the public API changed
 - [ ] Bump `Openpay::VERSION` in `Openpay/Data/Openpay.php`

@@ -12,7 +12,7 @@
         "mexico",
         "nowo"
     ],
-    "homepage": "https://github.com/nowo-tech/openpay-php",
+    "homepage": "https://github.com/nowo-tech/OpenpayPhp",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -32,9 +32,9 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/nowo-tech/openpay-php/issues",
-        "source": "https://github.com/nowo-tech/openpay-php",
-        "docs": "https://github.com/nowo-tech/openpay-php/blob/master/README.md"
+        "issues": "https://github.com/nowo-tech/OpenpayPhp/issues",
+        "source": "https://github.com/nowo-tech/OpenpayPhp",
+        "docs": "https://github.com/nowo-tech/OpenpayPhp/blob/master/README.md"
     },
     "require": {
         "php": ">=8.3",
