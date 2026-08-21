@@ -10,6 +10,9 @@ class OpenpayApiConnector
 {
 
     private static $instance;
+
+    private static ?OpenpayHttpTransport $transport = null;
+
     private $apiKey;
 
     private function __construct()
@@ -26,11 +29,18 @@ class OpenpayApiConnector
     }
 
     /**
-     * Drops the process-wide connector singleton. Called from {@see Openpay::reset()}.
+     * Drops the process-wide connector singleton and custom transport.
+     * Called from {@see Openpay::reset()}.
      */
     public static function reset(): void
     {
-        self::$instance = null;
+        self::$instance  = null;
+        self::$transport = null;
+    }
+
+    public static function setTransport(?OpenpayHttpTransport $transport): void
+    {
+        self::$transport = $transport;
     }
 
     // ---------------------------------------------------------
@@ -82,82 +92,36 @@ class OpenpayApiConnector
 
         array_push($headers, 'X-Forwarded-For: ' . $publicIp);
 
-        list($rbody, $rcode) = $this->_curlRequest($method, $absUrl, $headers, $params, $myApiKey);
+        list($rbody, $rcode) = $this->dispatch($method, $absUrl, $headers, $params, $myApiKey);
         return $this->interpretResponse($rbody, $rcode);
     }
 
-    private function _curlRequest($method, $absUrl, $headers, $params, $auth = null)
+    private function transport(): OpenpayHttpTransport
     {
-        OpenpayApiConsole::trace('OpenpayApiConnector @_curlRequest');
+        return self::$transport ?? new CurlHttpTransport();
+    }
 
-        $opts = array();
-        if (!is_array($headers)) {
-            $headers = array();
-        }
+    private function dispatch($method, $absUrl, $headers, $params, $auth = null)
+    {
+        $body = null;
 
-        if ($method == 'get') {
-            $opts[CURLOPT_HTTPGET] = 1;
+        if ($method === 'get') {
             if (count($params) > 0) {
-                $encoded = $this->encodeToQueryString($params);
-                $absUrl = $absUrl . '?' . $encoded;
+                $absUrl .= '?' . $this->encodeToQueryString($params);
             }
-        } else if ($method == 'post') {
-            $data = $this->encodeToJson($params);
-            $opts[CURLOPT_POST] = 1;
-            $opts[CURLOPT_POSTFIELDS] = $data;
-            array_push($headers, 'Content-Type: application/json');
-            array_push($headers, 'Content-Length: ' . strlen($data));
-        } else if ($method == 'put') {
-            $data = $this->encodeToJson($params);
-            $opts[CURLOPT_CUSTOMREQUEST] = 'PUT';
-            $opts[CURLOPT_POSTFIELDS] = $data;
-            array_push($headers, 'Content-Type: application/json');
-            array_push($headers, 'Content-Length: ' . strlen($data));
-        } else if ($method == 'delete') {
-            $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
+        } elseif ($method === 'post' || $method === 'put') {
+            $body     = $this->encodeToJson($params);
+            $headers[] = 'Content-Type: application/json';
+            $headers[] = 'Content-Length: ' . strlen($body);
+        } elseif ($method === 'delete') {
             if (count($params) > 0) {
-                $encoded = $this->encodeToQueryString($params);
-                $absUrl = $absUrl . '?' . $encoded;
+                $absUrl .= '?' . $this->encodeToQueryString($params);
             }
         } else {
             throw new OpenpayApiError("Invalid request method '" . $method . "'");
         }
 
-
-        $opts[CURLOPT_URL] = $absUrl;
-        $opts[CURLOPT_RETURNTRANSFER] = TRUE;
-        $opts[CURLOPT_CONNECTTIMEOUT] = 30;
-        $opts[CURLOPT_TIMEOUT] = 80;
-        $opts[CURLOPT_HTTPHEADER] = $headers;
-        $opts[CURLOPT_SSL_VERIFYPEER] = TRUE;
-
-        if ($auth) {
-            $opts[CURLOPT_USERPWD] = $auth . ':';
-        }
-
-        $curl = curl_init();
-        curl_setopt_array($curl, $opts);
-
-        OpenpayApiConsole::debug('Executing cURL: ' . strtoupper($method) . ' > ' . $absUrl);
-
-        $rbody = curl_exec($curl);
-
-        if ($rbody === false) {
-            OpenpayApiConsole::error('cURL request error: ' . curl_errno($curl));
-            $message = curl_error($curl);
-            $errorCode = curl_errno($curl);
-
-            $this->handleCurlError($errorCode, $message);
-        }
-        $rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-        if (mb_detect_encoding($rbody, 'UTF-8', true) != 'UTF-8') {
-            OpenpayApiConsole::warn('Response body is not an UTF-8 string');
-        }
-
-        OpenpayApiConsole::debug('cURL HTTP status: ' . $rcode);
-
-        return array($rbody, $rcode);
+        return $this->transport()->send($method, $absUrl, $headers, $body, $auth);
     }
 
     private function encodeToQueryString($arr, $prefix = null)
@@ -257,22 +221,6 @@ class OpenpayApiConnector
             default:
                 throw new OpenpayApiError($message, $error, $category, $request_id, $responseCode, $fraud_rules);
         }
-    }
-
-    private function handleCurlError($errorCode, $message)
-    {
-        switch ($errorCode) {
-            case CURLE_COULDNT_CONNECT:
-            case CURLE_COULDNT_RESOLVE_HOST:
-            case CURLE_OPERATION_TIMEOUTED:
-                $msg = "Could not connect to Openpay.  Please check your internet connection and try again";
-                break;
-            default:
-                $msg = "Unexpected error connecting to Openpay";
-        }
-
-        $msg .= " (Network error " . $errorCode . ")";
-        throw new OpenpayApiConnectionError($msg);
     }
 
     // ---------------------------------------------------------
