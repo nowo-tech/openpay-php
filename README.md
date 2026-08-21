@@ -1,31 +1,29 @@
 ![Openpay PHP](https://www.openpay.mx/img/github/php.jpg)
 
-PHP client for Openpay API services (version 3.0.0)
+PHP client for Openpay API services (version 3.1.1)
 
-This is a client implementing the payment services for Openpay at openpay.mx
+This is a **Nowo fork** of [open-pay/openpay-php](https://github.com/open-pay/openpay-php)
+(`openpay/sdk` 3.1.1). Namespaces stay `Openpay\\`. Extra APIs:
+`Openpay::configure()`, `Openpay::reset()`, `OpenpayApi::createRoot()` — so
+merchant credentials do not leak across php-fpm / FrankenPHP worker requests.
 
+Upstream PR: [open-pay/openpay-php#88](https://github.com/open-pay/openpay-php/pull/88).
+Packagist: `nowo-tech/openpay-php` (replaces `openpay/sdk` 3.1.1).
 
 Compatibility
 -------------
 
-PHP 5.2 or later 
+PHP 8.1 or later
 
 Requirements
 ------------
-PHP 5.2 or later 
+PHP 8.1 or later
 cURL extension for PHP
 JSON extension for PHP
 Multibyte String extension for PHP
 
 Installation
 ------------
-
-Agregar en la documentación lo siguiente:
-* composer 1 : versión php 2.1.*
-* composer 2: versión 2.2.* || version 3.0.0
-  
-
-
 
 ### Composer
 The preferred method is via [composer](https://getcomposer.org). Follow the
@@ -35,8 +33,12 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require openpay/sdk
+composer require nowo-tech/openpay-php
 ```
+
+This package `replace`s `openpay/sdk` 3.1.1, so Composer will not install the
+official SDK alongside it.
+
 Finally, be sure to include the autoloader:
 
 ```php
