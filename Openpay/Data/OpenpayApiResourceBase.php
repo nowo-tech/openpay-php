@@ -367,7 +367,8 @@ abstract class OpenpayApiResourceBase
     // ------------------  PUBLIC FUNCTIONS  -------------------
 
     public function getUrl() // $includeId = true
-    {OpenpayApiConsole::trace('OpenpayApiResourceBase @getUrl > class/parent: '.static::class.'/'.($this->parent ? 'true' : 'false'));
+    {
+        OpenpayApiConsole::trace('OpenpayApiResourceBase @getUrl > class/parent: '.static::class.'/'.($this->parent ? 'true' : 'false'));
         $parentUrl = '';
 
         if ($this->parent) {

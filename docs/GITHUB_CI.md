@@ -13,9 +13,9 @@ Default branch is **`master`**.
 ## REQ-GIT-001
 
 `.scripts/check-no-cursor-coauthor.sh` is the same checker as other Nowo packages.
-Install hooks with `make setup-hooks`.
+Install hooks with `make setup-hooks`. `make release-check` runs the checker locally.
 
 This fork still has historical Cursor co-author trailers from the 3.2.0
 modernization PRs. Do **not** force-push `master` until a dedicated
-`make strip-cursor-coauthor-from-history` pass is approved. The `git-hygiene`
-CI job is omitted until that rewrite lands.
+`make strip-cursor-coauthor-from-history` pass is approved. The CI workflow
+does not fail the default branch on that history until the rewrite lands.
