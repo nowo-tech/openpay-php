@@ -1,5 +1,15 @@
 # Upgrading
 
+## 3.2.0 → 3.2.1
+
+Patch release. **No breaking Openpay API.** Keep `^3.2`.
+
+- User-Agent becomes `OpenpayPhp/3.2.1`.
+- GitHub clone URL is `nowo-tech/OpenpayPhp` (Packagist stays `nowo-tech/openpay-php`).
+- Nested resource cache ids that were integers no longer TypeError on PHP 8.
+- After `reset()`, still call `configure()` / `getInstance($id, $apiKey, …)` /
+  `configureFromEnvironment()` / `OpenpaySession` — same as 3.2.0.
+
 ## 3.1.1.1 → 3.2.0
 
 This is the first Nowo fork release after the Packagist rename. It stays a
@@ -108,8 +118,8 @@ throws `OpenpayApiRequestError` instead of returning `null`.
 
 ### User-Agent
 
-Default User-Agent is `OpenpayPhp/3.2.0` (was `OpenpayPhp/v2`). Override with
-`Openpay::setUserAgent()`.
+Default User-Agent is `OpenpayPhp/3.2.1` (was `OpenpayPhp/v2` upstream, then
+`OpenpayPhp/3.2.0`). Override with `Openpay::setUserAgent()`.
 
 ### Composer
 

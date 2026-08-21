@@ -9,14 +9,14 @@ namespace Openpay\Data;
  * against the merchant root, then {@see Openpay::reset()} so keys cannot leak
  * to the next php-fpm / FrankenPHP request.
  */
-final class OpenpaySession
+final readonly class OpenpaySession
 {
     public function __construct(
-        private readonly string $id,
-        private readonly string $apiKey,
-        private readonly string $country = 'MX',
-        private readonly string $publicIp = '127.0.0.1',
-        private readonly ?OpenpayHttpTransport $transport = null,
+        private string $id,
+        private string $apiKey,
+        private string $country = 'MX',
+        private string $publicIp = '127.0.0.1',
+        private ?OpenpayHttpTransport $transport = null,
     ) {
     }
 
@@ -30,7 +30,7 @@ final class OpenpaySession
     public function run(callable $callback): mixed
     {
         Openpay::configure($this->id, $this->apiKey, $this->country, $this->publicIp);
-        if (null !== $this->transport) {
+        if ($this->transport instanceof OpenpayHttpTransport) {
             Openpay::setHttpTransport($this->transport);
         }
 

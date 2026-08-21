@@ -30,7 +30,7 @@ final class OpenpaySessionTest extends TestCase
         );
 
         try {
-            $session->run(static function () {
+            $session->run(static function (): never {
                 self::assertSame('sk_bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', Openpay::getApiKey());
                 throw new \RuntimeException('charge failed');
             });

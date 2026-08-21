@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Openpay\Data;
 
-final class CurlHttpTransport implements OpenpayHttpTransport
+final readonly class CurlHttpTransport implements OpenpayHttpTransport
 {
     public function __construct(
-        private readonly int $connectTimeout = 30,
-        private readonly int $timeout = 80,
+        private int $connectTimeout = 30,
+        private int $timeout = 80,
     ) {
     }
 
@@ -52,10 +52,10 @@ final class CurlHttpTransport implements OpenpayHttpTransport
             OpenpayApiConsole::error('cURL request error: '.curl_errno($curl));
             $message = curl_error($curl);
             $errorCode = curl_errno($curl);
-            $this->handleCurlError($errorCode, $message);
+            $this->handleCurlError($errorCode);
         }
 
-        $rcode = (int) curl_getinfo($curl, \CURLINFO_HTTP_CODE);
+        $rcode = curl_getinfo($curl, \CURLINFO_HTTP_CODE);
 
         if (\is_string($rbody) && 'UTF-8' !== mb_detect_encoding($rbody, 'UTF-8', true)) {
             OpenpayApiConsole::warn('Response body is not an UTF-8 string');
@@ -66,17 +66,12 @@ final class CurlHttpTransport implements OpenpayHttpTransport
         return [(string) $rbody, $rcode];
     }
 
-    private function handleCurlError(int $errorCode, string $message): never
+    private function handleCurlError(int $errorCode): never
     {
-        switch ($errorCode) {
-            case \CURLE_COULDNT_CONNECT:
-            case \CURLE_COULDNT_RESOLVE_HOST:
-            case \CURLE_OPERATION_TIMEOUTED:
-                $msg = 'Could not connect to Openpay.  Please check your internet connection and try again';
-                break;
-            default:
-                $msg = 'Unexpected error connecting to Openpay';
-        }
+        $msg = match ($errorCode) {
+            \CURLE_COULDNT_CONNECT, \CURLE_COULDNT_RESOLVE_HOST, \CURLE_OPERATION_TIMEOUTED => 'Could not connect to Openpay.  Please check your internet connection and try again',
+            default => 'Unexpected error connecting to Openpay',
+        };
 
         $msg .= ' (Network error '.$errorCode.')';
         throw new OpenpayApiConnectionError($msg);

@@ -1,12 +1,12 @@
 # Openpay PHP SDK (Nowo fork)
 
-[![CI](https://github.com/nowo-tech/OpenpayPhp/actions/workflows/ci.yml/badge.svg)](https://github.com/nowo-tech/OpenpayPhp/actions/workflows/ci.yml) [![Packagist Version](https://img.shields.io/packagist/v/nowo-tech/openpay-php.svg?style=flat)](https://packagist.org/packages/nowo-tech/openpay-php) [![Packagist Downloads](https://img.shields.io/packagist/dt/nowo-tech/openpay-php.svg)](https://packagist.org/packages/nowo-tech/openpay-php) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE) [![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php)](https://php.net) [![GitHub stars](https://img.shields.io/github/stars/nowo-tech/openpay-php.svg?style=social&label=Star)](https://github.com/nowo-tech/OpenpayPhp)
+[![CI](https://github.com/nowo-tech/OpenpayPhp/actions/workflows/ci.yml/badge.svg)](https://github.com/nowo-tech/OpenpayPhp/actions/workflows/ci.yml) [![Packagist Version](https://img.shields.io/packagist/v/nowo-tech/openpay-php.svg?style=flat)](https://packagist.org/packages/nowo-tech/openpay-php) [![Packagist Downloads](https://img.shields.io/packagist/dt/nowo-tech/openpay-php.svg)](https://packagist.org/packages/nowo-tech/openpay-php) [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE) [![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php)](https://php.net) [![GitHub stars](https://img.shields.io/github/stars/nowo-tech/OpenpayPhp.svg?style=social&label=Star)](https://github.com/nowo-tech/OpenpayPhp)
 
 > ⭐ **Found this useful?** [Install from Packagist](https://packagist.org/packages/nowo-tech/openpay-php) · Give it a **star** on [GitHub](https://github.com/nowo-tech/OpenpayPhp) so more developers can find it.
 
 ![Openpay PHP](https://www.openpay.mx/img/github/php.jpg)
 
-PHP client for Openpay API services (Nowo fork **3.2.0**, based on openpay/sdk 3.1.1).
+PHP client for Openpay API services (Nowo fork **3.2.1**, based on openpay/sdk 3.1.1).
 
 This is a **Nowo fork** of [open-pay/openpay-php](https://github.com/open-pay/openpay-php)
 (`openpay/sdk` 3.1.1). Namespaces stay `Openpay\\`. Extra APIs:

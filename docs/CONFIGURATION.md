@@ -7,12 +7,13 @@ and FrankenPHP workers.
 
 ```php
 use Openpay\Data\Openpay;
+use Openpay\Data\OpenpayApi;
 
 Openpay::configure($merchantId, $privateKey, 'MX', $publicIp);
-$openpay = Openpay::getInstance();
+$openpay = OpenpayApi::createRoot();
 ```
 
-Or in one call:
+Or credentials and root in one call (`getInstance` requires id and key):
 
 ```php
 $openpay = Openpay::getInstance($merchantId, $privateKey, 'MX', $publicIp);
@@ -20,12 +21,17 @@ $openpay = Openpay::getInstance($merchantId, $privateKey, 'MX', $publicIp);
 
 ## Environment variables
 
-`OPENPAY_MERCHANT_ID`, `OPENPAY_API_KEY`, `OPENPAY_PUBLIC_IP`, `OPENPAY_SANDBOX`
-(and country) are read by `getInstance()` **only when** the statics are empty.
+On a **fresh process** that has never called `reset()` / `configure()` /
+`getInstance()`, empty statics still fall back to:
 
-After `Openpay::reset()`, env vars are **not** re-read until
-`Openpay::configureFromEnvironment()` or a new `configure()` / `getInstance()`
-with arguments.
+- `OPENPAY_MERCHANT_ID`
+- `OPENPAY_API_KEY`
+- `OPENPAY_COUNTRY` (default `MX`)
+- `OPENPAY_PUBLIC_IP` (default `127.0.0.1`)
+- `OPENPAY_PRODUCTION_MODE` (`FALSE` → sandbox; any other value → production)
+
+After `Openpay::reset()`, those variables are **not** re-read until
+`Openpay::configureFromEnvironment()` or a new `configure()` / `getInstance($id, $apiKey, …)`.
 
 ## HTTP transport
 

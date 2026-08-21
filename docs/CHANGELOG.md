@@ -10,15 +10,28 @@ The Composer package is `nowo-tech/openpay-php`. It still `replace`s upstream
 
 ## [Unreleased]
 
+## [3.2.1] - 2026-08-21
+
+Patch on **3.2.0**: Nowo REQ-* scaffold, coverage gate, and a PHP 8 cache-id fix.
+Public Openpay resource API is unchanged.
+
 ### Added
 
-- REQ-* compliance: `git-hygiene` CI job, PascalCase GitHub slug `OpenpayPhp`,
-  PHPUnit coverage ≥ 99% of `Openpay/`, Spec Kit deep baseline (SPECKIT-003).
+- REQ-* library scaffold: Docker/Make QA, Cursor/Spec Kit docs, `docs/` map.
+- CI `git-hygiene` job (`fetch-depth: 0`) for REQ-GIT-001.
+- PHPUnit coverage ≥ 99% of `Openpay/` (REQ-TEST-003); Clover Lines **99.63%**.
+- Spec Kit baseline (`specs/001-baseline/`) for SPECKIT-003.
+- GitHub repository slug PascalCase `nowo-tech/OpenpayPhp` (REQ-DOCS-014). Packagist name stays `nowo-tech/openpay-php`.
 
 ### Fixed
 
 - `OpenpayApiDerivedResource` cache ids are cast to string before `strtolower()`
   (PHP 8 TypeError on integer fallback ids).
+
+### Changed
+
+- User-Agent is `OpenpayPhp/3.2.1`.
+- Rector (`make rector-dry`) scoped to Nowo HTTP/session files + `tests/` (same surface as PHPStan). `OpenpaySession` / `CurlHttpTransport` are `readonly`.
 
 ## [3.2.0] - 2026-08-21
 
@@ -71,5 +84,6 @@ First Packagist release of the Nowo fork (`nowo-tech/openpay-php`).
   php-fpm / FrankenPHP workers.
 - Composer name changed from `openpay/sdk` because that vendor is claimed on Packagist.
 
+[3.2.1]: https://github.com/nowo-tech/OpenpayPhp/compare/3.2.0...v3.2.1
 [3.2.0]: https://github.com/nowo-tech/OpenpayPhp/compare/3.1.1.1...3.2.0
 [3.1.1.1]: https://github.com/nowo-tech/OpenpayPhp/releases/tag/3.1.1.1

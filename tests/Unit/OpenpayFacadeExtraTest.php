@@ -71,7 +71,7 @@ final class OpenpayFacadeExtraTest extends TestCase
         self::assertSame('aaaaaaaaaaaaaaaaaaaa', Openpay::getId());
         Openpay::setCountry('');
         self::assertSame('MX', Openpay::getCountry());
-        Openpay::setPublicIp(null);
+        Openpay::setPublicIp();
         self::assertSame('127.0.0.1', Openpay::getPublicIp());
     }
 

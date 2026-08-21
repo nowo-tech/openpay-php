@@ -6,9 +6,10 @@ use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/Openpay',
+        __DIR__ . '/Openpay/Data/OpenpaySession.php',
+        __DIR__ . '/Openpay/Data/OpenpayHttpTransport.php',
+        __DIR__ . '/Openpay/Data/CurlHttpTransport.php',
         __DIR__ . '/tests',
-        __DIR__ . '/Openpay.php',
     ])
     ->withPhpSets(php83: true)
     ->withPreparedSets(

@@ -44,7 +44,7 @@ Clover (PHPUnit `Openpay/` include): statements **≥ 99%**. Root `Openpay.php` 
 | File | Requirement |
 | ---- | ----------- |
 | `Openpay/Data/OpenpayApiResourceBase.php` | FR-RES-001 |
-| `Openpay/Data/OpenpayApiDerivedResource.php` | FR-RES-002 |
+| `Openpay/Data/OpenpayApiDerivedResource.php` | FR-RES-002 (cache ids cast to string before `strtolower`) |
 
 ## Domain resources (FR-RES-003)
 

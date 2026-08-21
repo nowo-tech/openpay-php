@@ -2,8 +2,9 @@
 
 Use this checklist when cutting a new version.
 
-> Current release: **3.2.0** (tag `3.2.0`, no `v` prefix — matches upstream).
-> New tags should be `vX.Y.Z` so `.github/workflows/release.yml` runs.
+> Current release: **3.2.1** (tag `v3.2.1`).
+> Tags must match `v*` so `.github/workflows/release.yml` creates the GitHub Release.
+> Older tags `3.1.1.1` and `3.2.0` have no `v` prefix (upstream-style).
 
 ## Before releasing
 
@@ -16,9 +17,9 @@ Use this checklist when cutting a new version.
 ## Releasing
 
 ```bash
-git tag -a v3.3.0 -m "Release v3.3.0"
+git tag -a v3.2.1 -m "Release v3.2.1"
 git push origin master
-git push origin v3.3.0
+git push origin v3.2.1
 ```
 
 ## After pushing

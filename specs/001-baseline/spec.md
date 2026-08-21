@@ -65,7 +65,7 @@ As a tester, I inject `OpenpayHttpTransport` so PHPUnit never hits the live Open
 ### Resources
 
 - **FR-RES-001**: Resource CRUD goes through `OpenpayApiResourceBase` (`_create` / `_retrieve` / `_find` / `_update` / `_delete`).
-- **FR-RES-002**: Nested lists use `OpenpayApiDerivedResource` (`add` / `get` / `getList`).
+- **FR-RES-002**: Nested lists use `OpenpayApiDerivedResource` (`add` / `get` / `getList`). Cache keys MUST be cast to string before `strtolower()` (PHP 8 rejects `strtolower(int)`).
 - **FR-RES-003**: Domain resources (Customer, Charge, Card, Plan, Subscription, Token, Webhook, Fee, Payout, Transfer, BankAccount, Capture, Refund, Pse, Bine) expose the upstream Openpay paths.
 
 ## Success criteria
@@ -80,6 +80,7 @@ As a tester, I inject `OpenpayHttpTransport` so PHPUnit never hits the live Open
 - Not a Symfony bundle (no Flex recipe, no Twig, no admin UI).
 - Not a live Openpay sandbox integration in CI (fake HTTP transport only).
 - PHPStan is not required to analyse the entire legacy `Openpay/Resources` tree in this baseline.
+- Rector (`make rector-dry`) is scoped to the same Nowo HTTP/session files plus `tests/` — not the upstream resource engine.
 
 ## Validation commands
 
