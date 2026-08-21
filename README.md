@@ -4,8 +4,10 @@ PHP client for Openpay API services (version 3.1.1)
 
 This is a **Nowo fork** of [open-pay/openpay-php](https://github.com/open-pay/openpay-php)
 (`openpay/sdk` 3.1.1). Namespaces stay `Openpay\\`. Extra APIs:
-`Openpay::configure()`, `Openpay::reset()`, `OpenpayApi::createRoot()` — so
-merchant credentials do not leak across php-fpm / FrankenPHP worker requests.
+`Openpay::configure()`, `Openpay::reset()`, `Openpay::configureFromEnvironment()`,
+`OpenpayApi::createRoot()` — so merchant credentials do not leak across php-fpm /
+FrankenPHP worker requests. After `reset()`, `OPENPAY_*` env vars are ignored
+until the next `configure()` / `getInstance()` / `configureFromEnvironment()`.
 
 Upstream PR: [open-pay/openpay-php#88](https://github.com/open-pay/openpay-php/pull/88).
 Packagist: `nowo-tech/openpay-php` (replaces `openpay/sdk` 3.1.1).
@@ -13,11 +15,11 @@ Packagist: `nowo-tech/openpay-php` (replaces `openpay/sdk` 3.1.1).
 Compatibility
 -------------
 
-PHP 8.1 or later
+PHP 8.3 or later
 
 Requirements
 ------------
-PHP 8.1 or later
+PHP 8.3 or later
 cURL extension for PHP
 JSON extension for PHP
 Multibyte String extension for PHP
@@ -97,10 +99,19 @@ $openpay = Openpay::getInstance('MERCHANT_ID', 'PRIVATE_KEY', 'COUNTRY_CODE', 'P
 //PUBLIC_IP = 127.0.0.1 (Sustituir por tu ip publica)
 ```
 
-  - Configure the Marchant ID, the Private Key and country code as well, as environment 
-    variables. This method has its own advantages as this sensitive data is not
-    exposed directly in any script.
-    
+  - Configure the Merchant ID, the Private Key and country code as environment
+    variables (`OPENPAY_MERCHANT_ID`, `OPENPAY_API_KEY`, optional
+    `OPENPAY_COUNTRY`, `OPENPAY_PUBLIC_IP`, `OPENPAY_PRODUCTION_MODE`). On a
+    fresh process those vars are read automatically. After `Openpay::reset()`
+    (required between requests on php-fpm / FrankenPHP workers) call
+    `Openpay::configureFromEnvironment()` so the next tenant does not inherit
+    the process environment:
+
+```php
+Openpay::reset();
+Openpay::configureFromEnvironment();
+```
+
 > NOTE: please, refer to PHP documentation for further information about this method.
 
 

@@ -23,6 +23,14 @@ class OpenpayApiConnector
         return self::$instance;
     }
 
+    /**
+     * Drops the process-wide connector singleton. Called from {@see Openpay::reset()}.
+     */
+    public static function reset(): void
+    {
+        self::$instance = null;
+    }
+
     // ---------------------------------------------------------
     // ------------------  PRIVATE FUNCTIONS  ------------------
 
