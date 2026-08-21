@@ -1,6 +1,6 @@
 # Code inventory — Openpay PHP SDK
 
-**Last audited**: 2026-08-21  
+**Last audited**: 2026-08-21 (release **3.2.1**)  
 **Layout**: no `src/`; production PHP lives in `Openpay/` (PSR-4) plus root `Openpay.php` (manual-install bootstrap).  
 **Audit command**: `find Openpay -name '*.php' | wc -l` → **39**; plus `Openpay.php` → **40** production units.
 
@@ -14,7 +14,9 @@
 | Domain resources | 25 | FR-RES-003 |
 | **Total** | **40** | |
 
-Clover (PHPUnit `Openpay/` include): statements **≥ 99%**. Root `Openpay.php` is bootstrap-only (not in the Clover include). Two unreachable Connector statements are `@codeCoverageIgnore` (missing-class guard; return after throw). See [`docs/COVERAGE.md`](../../docs/COVERAGE.md).
+Clover (PHPUnit `Openpay/` include): **Lines ≥ 99%** (3.2.1 measured **99.63%**). Root `Openpay.php` is bootstrap-only (not in the Clover include). Two unreachable Connector statements are `@codeCoverageIgnore` (missing-class guard; return after throw). See [`docs/COVERAGE.md`](../../docs/COVERAGE.md).
+
+PHPStan / Rector (Nowo surface only): `OpenpaySession.php`, `OpenpayHttpTransport.php`, `CurlHttpTransport.php` (+ Rector `tests/`).
 
 ## Bootstrap / facade / session
 
