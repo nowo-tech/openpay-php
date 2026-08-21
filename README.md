@@ -1,13 +1,22 @@
 ![Openpay PHP](https://www.openpay.mx/img/github/php.jpg)
 
-PHP client for Openpay API services (version 3.1.1)
+PHP client for Openpay API services (Nowo fork **3.2.0**, based on openpay/sdk 3.1.1)
 
 This is a **Nowo fork** of [open-pay/openpay-php](https://github.com/open-pay/openpay-php)
 (`openpay/sdk` 3.1.1). Namespaces stay `Openpay\\`. Extra APIs:
 `Openpay::configure()`, `Openpay::reset()`, `Openpay::configureFromEnvironment()`,
-`OpenpayApi::createRoot()` — so merchant credentials do not leak across php-fpm /
-FrankenPHP worker requests. After `reset()`, `OPENPAY_*` env vars are ignored
-until the next `configure()` / `getInstance()` / `configureFromEnvironment()`.
+`OpenpayApi::createRoot()`, `OpenpaySession`, `Openpay::setHttpTransport()` — so
+merchant credentials do not leak across php-fpm / FrankenPHP worker requests.
+After `reset()`, `OPENPAY_*` env vars are ignored until the next `configure()` /
+`getInstance()` / `configureFromEnvironment()`.
+
+Docs: [CHANGELOG](CHANGELOG.md) · [UPGRADING](UPGRADING.md) (3.1.1.1 → 3.2.0).
+
+```php
+use Openpay\Data\Openpay;
+use Openpay\Data\OpenpaySession;
+use Openpay\Data\CurlHttpTransport;
+```
 
 To swap cURL for tests or a PSR-18 client, implement `OpenpayHttpTransport`
 and call `Openpay::setHttpTransport()`. `reset()` restores the cURL default.
@@ -24,7 +33,7 @@ $charge  = $session->run(fn ($openpay) => $openpay->charges->add($payload));
 ```
 
 Upstream PR: [open-pay/openpay-php#88](https://github.com/open-pay/openpay-php/pull/88).
-Packagist: `nowo-tech/openpay-php` (replaces `openpay/sdk` 3.1.1).
+Packagist: [`nowo-tech/openpay-php`](https://packagist.org/packages/nowo-tech/openpay-php) (replaces `openpay/sdk` 3.1.1).
 
 Compatibility
 -------------
@@ -49,7 +58,7 @@ composer installed.
 Once composer is installed, execute the following command in your project root to install this library:
 
 ```sh
-composer require nowo-tech/openpay-php
+composer require nowo-tech/openpay-php:^3.2
 ```
 
 This package `replace`s `openpay/sdk` 3.1.1, so Composer will not install the
@@ -63,35 +72,46 @@ require_once '/path/to/your-project/vendor/autoload.php';
 
 ### Manual installation
 
-To install, just:
+Composer is preferred. For a copy-paste install:
 
-  - Clone the repository or download the library and copy/create a folder named
-    **'Openpay'** inside your project folder structure. If you downloaded the 
-    client library as a compressed file, uncompress it and create the proper 
-    folder structure.
-  - At the top of the PHP script in which the client library will be used (or 
-    in the section you include other libraries), add the client's library main
-    script:
-    
+  - Clone or download this repository next to your project.
+  - Require the **repository-root** bootstrap (not `Openpay/Openpay.php` — that
+    path does not exist):
+
 ```php
-require(dirname(__FILE__) . '/Openpay/Openpay.php');
+require __DIR__ . '/openpay-php/Openpay.php';
+
+use Openpay\Data\Openpay;
 ```
 
-> NOTE: In the example above, the library is located in the directory named 
-> Openpay, located inside the same directory that the PHP file which is 
-> including the cliente. Make sure to adjust the paths inside your project,
-> otherwise the library will not work.
+> NOTE: Adjust the path to wherever you placed the clone. Composer users must
+> **not** require this file; `vendor/autoload.php` is enough.
+
+### Tests
+
+```sh
+composer install
+vendor/bin/phpunit
+```
+
+PHP 8.3+ is required. CI runs 8.3, 8.4, 8.5, and 8.6.
 
  
 Implementation
 --------------
+
+All examples below assume:
+
+```php
+use Openpay\Data\Openpay;
+```
 
 #### Configuration #####
 
 Before use the library will be necessary to set up your Merchant ID and
 Private key. There are three options:
 
-  - Use the methods **Openpay::setId()*, **Openpay::setApiKey()** and **Openpay::setCountry()** . Just 
+  - Use the methods **Openpay::setId()**, **Openpay::setApiKey()** and **Openpay::setCountry()**. Just 
     pass the proper parameters to each function:
     
 ```php
@@ -144,6 +164,8 @@ Also you can use environment variables for this purpose:
 ````
 SetEnv OPENPAY_PRODUCTION_MODE true
 ````
+After `Openpay::reset()`, that env var is ignored until `configureFromEnvironment()`
+(or `setProductionMode()`). See [UPGRADING](UPGRADING.md).
 
 If its necessary, you can use the method **Openpay::getProductionMode()** to 
 determine anytime, which is the sandbox mode status:

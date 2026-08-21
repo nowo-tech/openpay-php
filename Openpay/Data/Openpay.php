@@ -14,7 +14,7 @@ namespace Openpay\Data;
  */
 class Openpay
 {
-    public const VERSION = '3.1.1';
+    public const VERSION = '3.2.0';
 
     private static $instance = null;
 
