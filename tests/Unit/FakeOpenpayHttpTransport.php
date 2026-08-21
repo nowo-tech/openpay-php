@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Openpay\Tests;
+namespace Openpay\Tests\Unit;
 
 use Openpay\Data\OpenpayHttpTransport;
 
@@ -18,11 +18,11 @@ final class FakeOpenpayHttpTransport implements OpenpayHttpTransport
     public function send(string $method, string $url, array $headers, ?string $body, ?string $auth): array
     {
         $this->calls[] = [
-            'method'  => $method,
-            'url'     => $url,
+            'method' => $method,
+            'url' => $url,
             'headers' => $headers,
-            'body'    => $body,
-            'auth'    => $auth,
+            'body' => $body,
+            'auth' => $auth,
         ];
 
         return [$this->body, $this->status];

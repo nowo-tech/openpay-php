@@ -8,7 +8,6 @@ use Openpay\Data\OpenpayApiResourceBase;
 
 class OpenpayWebhook extends OpenpayApiResourceBase
 {
-
     protected $url;
     protected $event_types;
 
@@ -17,9 +16,8 @@ class OpenpayWebhook extends OpenpayApiResourceBase
         return $this->_update();
     }
 
-    public function delete()
+    public function delete(): void
     {
         $this->_delete();
     }
-
 }

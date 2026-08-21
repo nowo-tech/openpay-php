@@ -4,25 +4,29 @@ declare(strict_types=1);
 
 namespace Openpay\Data;
 
-class OpenpayApiDerivedResource extends OpenpayApiResourceBase {
+class OpenpayApiDerivedResource extends OpenpayApiResourceBase
+{
+    private $cacheList = [];
 
-    private $cacheList = array();
+    protected static function getInstance($resourceName, $p = null)
+    {
+        if (class_exists($resourceName.'List')) {
+            $resource = $resourceName.'List';
 
-    protected static function getInstance($resourceName, $p = null) {
-        if (class_exists($resourceName . 'List')) {
-            $resource = $resourceName . 'List';
             return new $resource($resourceName);
         }
+
         return new self($resourceName);
     }
 
-    protected function addResource($resource, $id = null) {
+    protected function addResource($resource, $id = null): void
+    {
         if (!$id && isset($resource->id)) {
             $id = $resource->id;
-        } else if (is_string($id)) {
+        } elseif (\is_string($id)) {
             $id = strtolower($id);
         } else {
-            $id = count($this->cacheList) + 1;
+            $id = \count($this->cacheList) + 1;
         }
         if (!$this->isResourceListed($id)) {
             $resource->parent = $this;
@@ -30,57 +34,65 @@ class OpenpayApiDerivedResource extends OpenpayApiResourceBase {
         }
     }
 
-    protected function getResource($id) {
+    protected function getResource($id)
+    {
         $id = strtolower($id);
         if ($this->isResourceListed($id)) {
             return $this->cacheList[$id];
         }
     }
 
-    protected function removeResource($id) {
+    protected function removeResource($id): void
+    {
         $id = strtolower($id);
         if ($this->isResourceListed($id)) {
             unset($this->cacheList[$id]);
         }
     }
 
-    protected function isResourceListed($id) {
+    protected function isResourceListed($id)
+    {
         $id = strtolower($id);
-        return (isset($this->cacheList[$id]) && !empty($this->cacheList[$id]));
+
+        return isset($this->cacheList[$id]) && !empty($this->cacheList[$id]);
     }
 
     // ---------------------------------------------------------
     // ------------------  PUBLIC FUNCTIONS  -------------------
 
-
-    public function add($params) {
+    public function add($params)
+    {
         OpenpayApiConsole::trace('OpenpayApiDerivedResource @add');
 
         // TODO: validate call when the parent has not a valid ID
-        $resource = parent::_create($this->resourceName, $params, array('parent' => $this));
+        $resource = parent::_create($this->resourceName, $params, ['parent' => $this]);
         $this->addResource($resource);
+
         return $resource;
     }
 
-    public function get($id) {
+    public function get($id)
+    {
         OpenpayApiConsole::trace('OpenpayApiDerivedResource @get');
 
         if ($this->isResourceListed($id)) {
             return $this->getResource($id);
         }
-        $resource = parent::_retrieve($this->resourceName, $id, array('parent' => $this));
+        $resource = parent::_retrieve($this->resourceName, $id, ['parent' => $this]);
         $this->addResource($resource);
+
         return $resource;
     }
 
-    public function getList($params) {
+    public function getList($params)
+    {
         OpenpayApiConsole::trace('OpenpayApiDerivedResource @find');
 
-        $list = parent::_find($this->resourceName, $params, array('parent' => $this));
+        $list = parent::_find($this->resourceName, $params, ['parent' => $this]);
         foreach ($list as $resource) {
             $this->addResource($resource);
         }
+
         return $list;
     }
-
 }

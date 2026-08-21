@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Openpay\Resources;
 
 use Openpay\Data\OpenpayApiResourceBase;
-use Openpay\Data\OpenpayApiDerivedResource;
 
 class OpenpayCard extends OpenpayApiResourceBase
 {
-
     protected $type;
     protected $brand;
     protected $allows_charges;
@@ -19,14 +17,15 @@ class OpenpayCard extends OpenpayApiResourceBase
     protected $bank_code;
     protected $customer_id;
 
-    public function delete() {
+    public function delete(): void
+    {
         $this->_delete();
     }
 
-    public function get($param) {
+    public function get($param)
+    {
         return $this->_getAttributes($param);
     }
-
 }
 
 // ----------------------------------------------------------------------------

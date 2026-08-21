@@ -8,5 +8,4 @@ use Openpay\Data\OpenpayApiDerivedResource;
 
 class OpenpayCardList extends OpenpayApiDerivedResource
 {
-
 }

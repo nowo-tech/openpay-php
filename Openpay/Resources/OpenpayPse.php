@@ -8,7 +8,6 @@ use Openpay\Data\OpenpayApiResourceBase;
 
 class OpenpayPse extends OpenpayApiResourceBase
 {
-
     protected $authorization;
     protected $creation_date;
     protected $currency;
@@ -16,6 +15,5 @@ class OpenpayPse extends OpenpayApiResourceBase
     protected $operation_type;
     protected $status;
     protected $transaction_type;
-    protected $derivedResources = array();
-
+    protected $derivedResources = [];
 }

@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The Composer package is `nowo-tech/openpay-php`. It still `replace`s upstream
 `openpay/sdk` **3.1.1** (namespaces stay `Openpay\\`).
 
+## [Unreleased]
+
+### Added
+
+- Nowo bundles REQ-* scaffold: Docker, Makefile, PHP-CS-Fixer, Rector, PHPStan
+  (FrankenPHP rulesets), docs/, GitHub templates, Dependabot, release workflows.
+
 ## [3.2.0] - 2026-08-21
 
 Fork release on top of `3.1.1.1`. PHP 8.3+, request-isolated credentials, injectable HTTP.

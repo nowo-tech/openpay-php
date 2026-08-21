@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Openpay\Tests;
+namespace Openpay\Tests\Unit;
 
 use Openpay\Data\Openpay;
 use Openpay\Data\OpenpayApiConnector;
@@ -30,7 +30,7 @@ final class OpenpayHttpTransportTest extends TestCase
 
     public function testGetRequestUsesFakeTransportAndDecodesJson(): void
     {
-        $this->transport->body   = '{"id":"trxyz","status":"completed"}';
+        $this->transport->body = '{"id":"trxyz","status":"completed"}';
         $this->transport->status = 200;
 
         $response = OpenpayApiConnector::request('get', '/charges', ['limit' => 1]);
@@ -45,7 +45,7 @@ final class OpenpayHttpTransportTest extends TestCase
 
     public function testPostRequestSendsJsonBody(): void
     {
-        $this->transport->body   = '{"id":"chxyz"}';
+        $this->transport->body = '{"id":"chxyz"}';
         $this->transport->status = 201;
 
         $response = OpenpayApiConnector::request('post', '/charges', ['amount' => 100, 'method' => 'card']);
@@ -58,7 +58,7 @@ final class OpenpayHttpTransportTest extends TestCase
 
     public function testHttpErrorMapsToRequestError(): void
     {
-        $this->transport->body   = '{"error_code":1001,"description":"bad","category":"request"}';
+        $this->transport->body = '{"error_code":1001,"description":"bad","category":"request"}';
         $this->transport->status = 400;
 
         $this->expectException(OpenpayApiRequestError::class);
@@ -69,7 +69,7 @@ final class OpenpayHttpTransportTest extends TestCase
     public function testResetClearsCustomTransport(): void
     {
         $reflection = new \ReflectionClass(OpenpayApiConnector::class);
-        $property   = $reflection->getProperty('transport');
+        $property = $reflection->getProperty('transport');
 
         Openpay::setHttpTransport($this->transport);
         self::assertSame($this->transport, $property->getValue());

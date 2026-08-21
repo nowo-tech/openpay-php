@@ -1,24 +1,41 @@
 {
     "name": "nowo-tech/openpay-php",
-    "description": "Openpay PHP SDK fork 3.2.0 with request-safe credentials (configure/reset/OpenpaySession) for php-fpm and FrankenPHP worker. Drop-in replacement for openpay/sdk 3.1.1.",
+    "description": "Openpay PHP SDK fork with request-safe credentials for php-fpm and FrankenPHP workers. Drop-in replacement for openpay/sdk 3.1.1.",
     "type": "library",
+    "keywords": [
+        "openpay",
+        "payments",
+        "php",
+        "sdk",
+        "frankenphp",
+        "php-fpm",
+        "mexico",
+        "nowo"
+    ],
+    "homepage": "https://github.com/nowo-tech/openpay-php",
     "license": "Apache-2.0",
     "authors": [
+        {
+            "name": "Héctor Franco Aceituno",
+            "email": "hectorfranco@nowo.tech",
+            "homepage": "https://github.com/HecFranco",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Nowo.tech",
+            "homepage": "https://nowo.tech"
+        },
         {
             "name": "Openpay",
             "homepage": "https://www.openpay.mx/",
             "email": "soporte@openpay.mx"
-        },
-        {
-            "name": "Federico Balderas",
-            "homepage": "https://openpay.mx/",
-            "email": "plugins@openpay.mx"
-        },
-        {
-            "name": "Nowo",
-            "homepage": "https://nowo.tech/"
         }
     ],
+    "support": {
+        "issues": "https://github.com/nowo-tech/openpay-php/issues",
+        "source": "https://github.com/nowo-tech/openpay-php",
+        "docs": "https://github.com/nowo-tech/openpay-php/blob/master/README.md"
+    },
     "require": {
         "php": ">=8.3",
         "ext-curl": "*",
@@ -26,18 +43,15 @@
         "ext-json": "*",
         "ext-mbstring": "*"
     },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.64",
+        "nowo-tech/phpstan-frankenphp": "^1.1",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.5",
+        "rector/rector": "^2.0"
+    },
     "replace": {
         "openpay/sdk": "3.1.1"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^11.5"
-    },
-    "scripts": {
-        "test": "phpunit"
-    },
-    "support": {
-        "issues": "https://github.com/nowo-tech/openpay-php/issues",
-        "source": "https://github.com/nowo-tech/openpay-php"
     },
     "autoload": {
         "psr-4": {
@@ -47,6 +61,39 @@
     "autoload-dev": {
         "psr-4": {
             "Openpay\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-coverage": "phpunit --coverage-text --coverage-clover=coverage.xml --coverage-html=coverage",
+        "cs-check": "php-cs-fixer fix --dry-run --diff",
+        "cs-fix": "php-cs-fixer fix",
+        "rector": "rector process",
+        "rector-dry": "rector process --dry-run",
+        "phpstan": "phpstan analyse --memory-limit=1G",
+        "qa": [
+            "@cs-check",
+            "@phpstan",
+            "@test"
+        ]
+    },
+    "archive": {
+        "exclude": [
+            "/demo",
+            "/.cursor"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.2-dev"
         }
     }
 }

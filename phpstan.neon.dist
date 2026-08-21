@@ -1,0 +1,12 @@
+parameters:
+    level: 6
+    paths:
+        - Openpay/Data/OpenpaySession.php
+        - Openpay/Data/OpenpayHttpTransport.php
+        - Openpay/Data/CurlHttpTransport.php
+    ignoreErrors: []
+
+includes:
+    - vendor/nowo-tech/phpstan-frankenphp/extension.neon
+    - vendor/nowo-tech/phpstan-frankenphp/ruleset-classic.neon
+    - vendor/nowo-tech/phpstan-frankenphp/ruleset-worker.neon

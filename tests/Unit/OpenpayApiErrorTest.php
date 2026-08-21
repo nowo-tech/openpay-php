@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Openpay\Tests;
+namespace Openpay\Tests\Unit;
 
 use Openpay\Data\OpenpayApiError;
 use PHPUnit\Framework\TestCase;

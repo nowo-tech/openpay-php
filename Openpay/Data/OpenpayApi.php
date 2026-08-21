@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace Openpay\Data;
 
-use Override;
-
 class OpenpayApi extends OpenpayApiResourceBase
 {
     protected $derivedResources = [
-        'Bine'     => [],
+        'Bine' => [],
         'Customer' => [],
-        'Card'     => [],
-        'Charge'   => [],
-        'Pse'      => [],
-        'Payout'   => [],
-        'Fee'      => [],
-        'Plan'     => [],
-        'Webhook'  => [],
-        'Token'    => []];
+        'Card' => [],
+        'Charge' => [],
+        'Pse' => [],
+        'Payout' => [],
+        'Fee' => [],
+        'Plan' => [],
+        'Webhook' => [],
+        'Token' => []];
 
-    #[Override]
+    #[\Override]
     protected static function getInstance($r, $p = null)
     {
         $resourceName = self::class;
@@ -36,13 +34,13 @@ class OpenpayApi extends OpenpayApiResourceBase
         return self::getInstance(null);
     }
 
-    #[Override]
+    #[\Override]
     protected function getMerchantInfo()
     {
         return parent::getMerchantInfo();
     }
 
-    #[Override]
+    #[\Override]
     protected function getResourceUrlName($p = true): string
     {
         return '';
