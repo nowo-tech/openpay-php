@@ -29,6 +29,12 @@
     "replace": {
         "openpay/sdk": "3.1.1"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
     "support": {
         "issues": "https://github.com/nowo-tech/openpay-php/issues",
         "source": "https://github.com/nowo-tech/openpay-php"
@@ -36,6 +42,11 @@
     "autoload": {
         "psr-4": {
             "Openpay\\": "Openpay/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Openpay\\Tests\\": "tests/"
         }
     }
 }
