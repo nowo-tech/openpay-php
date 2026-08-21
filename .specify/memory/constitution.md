@@ -22,8 +22,13 @@ Every production file under `Openpay/` and root `Openpay.php` must appear in
 GitHub Spec Kit is initialized with **Cursor Agent**. Do not add Cursor
 co-author trailers (REQ-GIT-001).
 
+### VI. Scoped static analysis
+PHPStan and Rector MUST stay on the Nowo HTTP/session surface (plus Rector
+`tests/`). Do not require a full-tree Rector rewrite of upstream `Openpay/Resources`
+as a release gate.
+
 ## Governance
 Amendments update this file, baseline spec when principles affect behavior, and
 `docs/CHANGELOG.md` when consumer-visible.
 
-**Version**: 1.0.0 | **Ratified**: 2026-08-21 | **Last Amended**: 2026-08-21
+**Version**: 1.1.0 | **Ratified**: 2026-08-21 | **Last Amended**: 2026-08-21
