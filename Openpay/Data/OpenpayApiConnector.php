@@ -138,27 +138,15 @@ class OpenpayApiConnector
         OpenpayApiConsole::debug('Executing cURL: ' . strtoupper($method) . ' > ' . $absUrl);
 
         $rbody = curl_exec($curl);
-        $errorCode = curl_errno($curl);
-
-        // if request fails because bad certificate verification, then
-        // retry the request by using the CA certificates bundle
-        // CURLE_SSL_CACERT || CURLE_SSL_CACERT_BADFILE
-        if ($errorCode == 60 || $errorCode == 77) {
-            curl_setopt($curl, CURLOPT_CAINFO, dirname(__FILE__) . '/cacert.pem');
-            $rbody = curl_exec($curl);
-        }
 
         if ($rbody === false) {
             OpenpayApiConsole::error('cURL request error: ' . curl_errno($curl));
             $message = curl_error($curl);
             $errorCode = curl_errno($curl);
-            curl_close($curl);
 
             $this->handleCurlError($errorCode, $message);
         }
         $rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-        curl_close($curl);
 
         if (mb_detect_encoding($rbody, 'UTF-8', true) != 'UTF-8') {
             OpenpayApiConsole::warn('Response body is not an UTF-8 string');
@@ -186,7 +174,7 @@ class OpenpayApiConnector
                 $k = $prefix . "[]";
 
             if (is_array($v)) {
-                $r[] = $this->encodeToQueryString($v, $k, true);
+                $r[] = $this->encodeToQueryString($v, $k);
             } else {
                 $r[] = urlencode($k) . "=" . urlencode($v);
             }
@@ -198,9 +186,10 @@ class OpenpayApiConnector
 
     private function encodeToJson($arr)
     {
-        $encoded = json_encode($arr);
-        if (mb_detect_encoding($encoded, 'UTF-8', true) != 'UTF-8') {
-            $encoded = utf8_encode($encoded);
+        try {
+            $encoded = json_encode($arr, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+        } catch (\JsonException $e) {
+            throw new OpenpayApiError('Failed to encode request as JSON: ' . $e->getMessage());
         }
         OpenpayApiConsole::debug('JSON UTF8 string: ' . $encoded);
         return $encoded;
@@ -210,14 +199,13 @@ class OpenpayApiConnector
     {
         OpenpayApiConsole::trace('OpenpayApiConnector @interpretResponse');
         try {
-            // return json as an array NOT an object
             if (!empty($responseBody)) {
-                $traslatedResponse = json_decode($responseBody, true);
+                $traslatedResponse = json_decode($responseBody, true, 512, JSON_THROW_ON_ERROR);
             } else {
                 $traslatedResponse = array();
             }
-        } catch (\Exception $e) {
-            throw new OpenpayApiRequestError("Invalid response: " . $responseBody, $responseCode);
+        } catch (\JsonException $e) {
+            throw new OpenpayApiRequestError('Invalid response: ' . $responseBody, $responseCode);
         }
 
         if ($responseCode < 200 || $responseCode >= 300) {
