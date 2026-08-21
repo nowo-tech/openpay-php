@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Openpay\Resources;
 
 use Openpay\Data\OpenpayApiResourceBase;
@@ -17,5 +19,3 @@ class OpenpayPse extends OpenpayApiResourceBase
     protected $derivedResources = array();
 
 }
-
-?>
