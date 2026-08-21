@@ -9,6 +9,20 @@ This is a **Nowo fork** of [open-pay/openpay-php](https://github.com/open-pay/op
 FrankenPHP worker requests. After `reset()`, `OPENPAY_*` env vars are ignored
 until the next `configure()` / `getInstance()` / `configureFromEnvironment()`.
 
+To swap cURL for tests or a PSR-18 client, implement `OpenpayHttpTransport`
+and call `Openpay::setHttpTransport()`. `reset()` restores the cURL default.
+
+```php
+Openpay::setHttpTransport(new CurlHttpTransport(connectTimeout: 5, timeout: 20));
+```
+
+Prefer `OpenpaySession` around each logical operation so `reset()` always runs:
+
+```php
+$session = new OpenpaySession($merchantId, $privateKey, 'MX', $publicIp, $transport);
+$charge  = $session->run(fn ($openpay) => $openpay->charges->add($payload));
+```
+
 Upstream PR: [open-pay/openpay-php#88](https://github.com/open-pay/openpay-php/pull/88).
 Packagist: `nowo-tech/openpay-php` (replaces `openpay/sdk` 3.1.1).
 
